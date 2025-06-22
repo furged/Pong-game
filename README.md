@@ -16,3 +16,14 @@ Day 1:
   <br>
   🔸Learnt about Recursssion, Sets and some of its methods.
 
+<br>
+Day 2:
+<br> 
+  SMALL-GAME-PROJECT
+  <br>
+  🔹Made paddles move up and down on user command
+  <br> 
+  
+  SKILL-BASE
+  <br>
+  🔸Learnt how to use Git bash and Github so that I can track my game-project.
