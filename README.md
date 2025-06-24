@@ -40,3 +40,12 @@ Day 3:
   🔸Dictionaries and Dictionary Methods
   <br>
   🔸C++ Basics and C++ Setup on VS Code
+
+<br>
+Day 4:
+<br>
+  SMALL-GAME-PROJECT
+  <br>
+  🔹Pong is completed
+  <br>
+  
