@@ -11,7 +11,6 @@ Day 1:
   <br>
   🔹Learnt a little about the python library "Turtle" which I am new to.
   <br>
-
   SKILL-BASE
   <br>
   🔸Learnt about Recursssion, Sets and some of its methods.
@@ -23,7 +22,21 @@ Day 2:
   <br>
   🔹Made paddles move up and down on user command
   <br> 
-  
-  SKILL-BASE
+   SKILL-BASE
   <br>
   🔸Learnt how to use Git bash and Github so that I can track my game-project.
+
+<br>
+Day 3:
+<br>
+  SMALL-GAME-PROJECT
+  <br>
+  🔹Working on the movement of the ball
+<br>
+  SKILL-BASE
+  <br>
+  🔸Set Methods
+  <br>
+  🔸Dictionaries and Dictionary Methods
+  <br>
+  🔸C++ Basics and C++ Setup on VS Code
