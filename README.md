@@ -1,51 +1,46 @@
-# progress-log
-Comprehensive log of my academic and personal growth in programming, data structures, and machine learning.
-<br>
-Day 1:
-<br>
-  SMALL-GAME-PROJECT
-  <br>
-  🔹Built the basic window of the game Pong. 
-  <br>
-  🔹Set up the background and made paddles and the ball
-  <br>
-  🔹Learnt a little about the python library "Turtle" which I am new to.
-  <br>
-  SKILL-BASE
-  <br>
-  🔸Learnt about Recursssion, Sets and some of its methods.
+# 🕹️ Pong Game in Python
 
-<br>
-Day 2:
-<br> 
-  SMALL-GAME-PROJECT
-  <br>
-  🔹Made paddles move up and down on user command
-  <br> 
-   SKILL-BASE
-  <br>
-  🔸Learnt how to use Git bash and Github so that I can track my game-project.
+This is a simple **Pong game** implemented in Python using the built-in `turtle` graphics library.<br>
+It's a two-player arcade-style game with score tracking and paddle controls.
 
-<br>
-Day 3:
-<br>
-  SMALL-GAME-PROJECT
-  <br>
-  🔹Working on the movement of the ball
-<br>
-  SKILL-BASE
-  <br>
-  🔸Set Methods
-  <br>
-  🔸Dictionaries and Dictionary Methods
-  <br>
-  🔸C++ Basics and C++ Setup on VS Code
+---
 
-<br>
-Day 4:
-<br>
-  SMALL-GAME-PROJECT
-  <br>
-  🔹Pong is completed
-  <br>
-  
+## 🎮 Game Features
+
+- Two-player paddle controls<br>
+- Real-time ball movement and collision<br>
+- Score tracking for both players<br>
+- Automatic ball reset on boundary collision<br>
+- Smooth gameplay using `ontimer()` loop
+
+---
+
+## 📁 Files
+
+- **`pong1.py`** – Contains the complete code to run the Pong game.
+
+---
+
+## 🛠️ Requirements
+
+- Python 3.x (recommended 3.10+)<br>
+- No external libraries required (uses Python’s built-in `turtle` module)
+
+---
+
+## ▶️ How to Run
+
+1. Open terminal or command prompt<br>
+2. Navigate to the folder where `pong1.py` is located<br>
+3. Run the following command:
+
+```bash
+python pong1.py
+
+## 💡 Future Enhancements
+
+Add sound effects using winsound or pygame<br>
+Create an AI paddle for single-player mode<br>
+Add a pause/restart feature<br>
+Display "Winner" when a player reaches a score threshold
+
