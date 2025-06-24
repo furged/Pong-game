@@ -28,6 +28,15 @@ It's a two-player arcade-style game with score tracking and paddle controls.
 
 ---
 
+## 💡 Future Enhancements
+
+Add sound effects using winsound or pygame<br>
+Create an AI paddle for single-player mode<br>
+Add a pause/restart feature<br>
+Display "Winner" when a player reaches a score threshold
+
+---
+
 ## ▶️ How to Run
 
 1. Open terminal or command prompt<br>
@@ -36,11 +45,4 @@ It's a two-player arcade-style game with score tracking and paddle controls.
 
 ```bash
 python pong1.py
-
-## 💡 Future Enhancements
-
-Add sound effects using winsound or pygame<br>
-Create an AI paddle for single-player mode<br>
-Add a pause/restart feature<br>
-Display "Winner" when a player reaches a score threshold
 
