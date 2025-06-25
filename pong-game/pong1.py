@@ -73,9 +73,9 @@ def game_loop():
 
     window.update()
 
-    if score_a == 2 or score_b == 2:
+    if score_a == 5 or score_b == 5:
         pen.goto(0, 100)
-        winner = "Player A" if score_a == 2 else "Player B"
+        winner = "Player A" if score_a == 5 else "Player B"
         pen.write(f"{winner} Wins!", align="center", font=("Centaur", 36, "bold"))
         return
 
