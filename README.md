@@ -1,19 +1,29 @@
 # AI Pong Lab
 
-An interactive Machine Learning playground where users play Pong against a Neural Network trained on human gameplay data.
+A real-time Machine Learning experiment where a human teaches a Neural Network to play Pong, and then watches it make decisions live in the browser.
 
-Built as a Machine Learning engineering portfolio project.
+This is not a game. This is an interactive ML research dashboard built for portfolio demonstration.
+
+---
+
+## Current Status
+
+**Deployment Note:** The codebase is fully functional locally. The trained TensorFlow.js model is included in the repository (`web_model/`). 
+
+However, due to a known TensorFlow.js + Vercel caching quirk, the model currently fails to fetch on the live hosted version. The browser correctly locates the file, but a WebGL/context parser error prevents the final activation. 
+
+This is a backend deployment issue, not a logic or dataset issue.
 
 ---
 
 ## Features
 
-- Play vs AI: Compete against a Neural Network trained on real human gameplay.
-- Local Multiplayer: 2-player mode (Player 1: W/S, Player 2: Arrow Keys).
-- Data Collection System: While you play, the game records your decisions. Click Export Data (CSV) to download the dataset for further ML training.
-- Live AI Dashboard: See what the Neural Network is thinking in real-time (Current Action, Confidence Bars, Win Rate, Games Played).
-- Neural Network Visualization: Watch inputs (Ball X, Y, Velocity) connect to outputs (UP, DOWN, STAY) with live activation lines.
-- Customizable UI: Change paddle colors, ball color, background, and neon border color through the Settings menu.
+- **Play vs AI:** The opponent paddle is driven by a Neural Network trained on recorded human gameplay.
+- **Local Multiplayer:** 2-player mode (Player 1: W/S, Player 2: Arrow Keys).
+- **Data Collection System:** While you play, the game records every decision frame into a CSV. Click Export Data to download the training set.
+- **Live AI Dashboard:** See what the model is "thinking" in real-time (Current Action, Win Rate, Games Played).
+- **Neural Network Visualization:** Real-time visualization of how the input layer connects to the output decisions (UP / DOWN / STAY).
+- **Customizable UI:** Change colors via the Settings menu.
 
 ---
 
@@ -21,10 +31,10 @@ Built as a Machine Learning engineering portfolio project.
 
 This project demonstrates the full ML lifecycle:
 
-1. Data Collection: A human plays Pong. The browser collects ball_x, ball_y, ball_dx, ball_dy, paddle_y, and the action taken (UP/DOWN/STAY) into a CSV file.
-2. Training: The CSV is fed into a Python script using TensorFlow / Keras to train a Multi-Layer Perceptron (MLP) Neural Network that mimics human decision-making.
-3. Deployment: The trained model is converted to TensorFlow.js format and loaded directly into the browser.
-4. Inference: When you play, the game state is passed through the Neural Network in real-time to control the AI paddle.
+1. **Data Collection:** A human plays Pong. The browser captures `ball_x`, `ball_y`, `ball_dx`, `ball_dy`, `paddle_y`, and the `action` taken into a CSV.
+2. **Training:** The CSV is processed in Google Colab. A Multi-Layer Perceptron (MLP) Neural Network is trained to mimic human decisions using TensorFlow / Keras.
+3. **Deployment:** The trained model is converted to TensorFlow.js format and embedded into the browser via Vercel.
+4. **Inference:** During gameplay, the current state passes through the Neural Network in real-time to move the AI paddle.
 
 ---
 
@@ -57,6 +67,8 @@ Pong-game/
 
 ![AI Pong Lab Screenshot](link-to-your-screenshot-here)
 
+*(Upload a screenshot to your GitHub repo and replace this link)*
+
 ---
 
 ## Getting Started (Run Locally)
@@ -65,11 +77,11 @@ Pong-game/
 
     git clone https://github.com/furged/Pong-game.git
 
-2. Open the folder and double-click `index.html` to launch the game in your browser.
+2. Open the folder and double-click `index.html` to launch the game locally.
 
 3. Choose Play vs AI or Multiplayer from the main menu.
 
-*Note: The AI model loads best in a modern browser with hardware acceleration enabled.*
+*Note: Running locally bypasses the Vercel caching bug. The model will load instantly.*
 
 ---
 
@@ -77,17 +89,21 @@ Pong-game/
 
 - Extracting structured gameplay data (CSV) from a live browser game.
 - Training a Neural Network (MLP) using Keras and Google Colab.
-- Exporting models to TensorFlow.js and deploying them to the web.
-- Debugging real-world issues like CORS, WebGL failures, and deployment path mismatches.
+- Converting Python-trained models to TensorFlow.js.
+- Debugging real-world deployment issues: CORS, WebGL engine failures, and Vercel cache mismatches.
 
 ---
 
-## Future Improvements
+## Known Issues & Future Improvements
 
-- Switch from GraphModel to LayersModel for easier browser compatibility.
+**Known Issue:**
+- TensorFlow.js fails to parse the `web_model` on Vercel due to a GraphModel / LayersModel format mismatch and aggressive caching. Fix in progress.
+
+**Planned Improvements:**
+- Switch from GraphModel to LayersModel to fix browser deployment.
 - Add Q-Learning / Reinforcement Learning agent.
 - Integrate real-time accuracy tracking for the AI.
-- Add a Play Against Human version and compare statistics.
+- Add a "Play Against Human" version and compare statistics.
 
 ---
 
