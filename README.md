@@ -60,23 +60,12 @@ It’s a Spider-Verse crossover between **Classic Gaming** and **Behavioral Clon
 | Vercel | The multiverse deployer |
 
 ---
-Spider-Pong/
-├── index.html # The lab interface
-├── style.css # Neon, dark, terminal-style UI
-├── script.js # Game engine + neural net wrapper
-├── web_model/ # The trained AI brain
-│ ├── model.json
-│ └── group1-shard1of1.bin
-└── README.md
-
 
 ---
 
 ## 🖼️ The Multiverse Screenshot
 
 ![Spider-Pong Screenshot](Screenshot.png)
-
-(Upload your screenshot to GitHub and replace the link above.)
 
 ---
 
@@ -118,4 +107,3 @@ The live Vercel deployment throws a GraphModel / LayersModel parsing error. It�
 ## 🕸️ Author
 
 A Machine Learning multiverse project by [furged](https://github.com/furged).
-## 📁 The Blueprint
