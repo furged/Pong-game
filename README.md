@@ -1,64 +1,70 @@
-# AI Pong Lab
+# 🕸️ Spider-Pong: The Neural Net Fusion
 
-A live experiment where a Neural Network learns to play Pong by watching you play.
-This is not a product. It is a research prototype.
+A behavioral cloning experiment where a Neural Network gets bitten by a radioactive Pong ball, learns everything you do, and fights you in the arena.
+
+This is not a game. This is a multiverse training ground for AI agents.
 
 ![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.0+-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
-![TensorFlow.js](https://img.shields.io/badge/TF.js-4.22+-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
-![Vercel](https://img.shields.io/badge/Deployment-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Research_Prototype-yellow?style=for-the-badge)
+![TF.js](https://img.shields.io/badge/TF.js-4.22+-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
+![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Prototype-yellow?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 ---
 
-> ⚠️ **Disclaimer:** This is an active research prototype. The AI opponent is currently broken on the live Vercel deployment due to a notorious TensorFlow.js parsing bug. It works perfectly locally. If you open the live link and the AI doesn't move, don't panic — it's the deployment, not your brain.
+> 🕷️ **Web-Slinger Note:** The live deployment is currently glitching due to a TensorFlow.js symbiote bug. The AI refuses to wake up on Vercel. But run it locally — and the web-slinging begins instantly.
 
 ---
 
-## What even is this?
+## 🧬 The Origin Story
 
-You play Pong. The game watches you. It writes down exactly what you do (position, velocity, decisions). That data is fed into a tiny Neural Network. The Neural Network learns to copy you. Then, it plays against you.
+You play Pong. The game watches. Every frame, it writes down a diary:  
+*"Ball at X, moving Y, paddle at Z… Human pressed UP."*
 
-It’s a behavioral cloning experiment disguised as a retro arcade game.
+That diary becomes data. The data becomes a Neural Network.  
+The Neural Network becomes your opponent — a perfect clone of your playstyle.
 
----
-
-## What does it actually do?
-
-- **Single Player (Behavioral Clone):** The opponent paddle is driven by a trained Neural Network that mimics your past gameplay.
-- **Local Multiplayer:** Classic 2-player mode. Player 1 uses W/S. Player 2 uses Arrow Keys.
-- **Data Exporter:** Every game generates a CSV file containing the exact state of every frame and the player's action. You can download it and retrain the model yourself.
-- **Live Dashboard:** While playing, you can watch the model's confidence levels, current action (UP/DOWN/STAY), win rate, and rally stats update in real-time.
-- **Neural Network Viz:** A live visualizer shows how the inputs (Ball X, Y, Velocity) flow into the output decisions.
-- **Custom Themes:** Change the colors of everything in the settings menu. Make it look like a 1980s arcade or a 2099 cyberpunk terminal.
+It’s a Spider-Verse crossover between **Classic Gaming** and **Behavioral Cloning**.
 
 ---
 
-## How the brain works (The ML Pipeline)
+## ⚡ Superpowers
 
-1. **You play.** The browser captures `ball_x`, `ball_y`, `ball_dx`, `ball_dy`, `paddle_y`, and your `action` (UP/DOWN/STAY) every single frame.
-2. **A CSV is born.** Click the "Export Data" button.
-3. **Colab does the math.** The CSV is fed into a Multi-Layer Perceptron (MLP) Neural Network built with TensorFlow/Keras.
-4. **The brain moves to the browser.** The trained model is converted to TensorFlow.js and deployed via Vercel.
-5. **Real-time inference.** The AI uses the live game state to decide its next move.
+- **Spider-Sense AI:** The opponent paddle is driven by a neural network that mimics your own reflexes.
+- **Local Co-op Mode:** 2-player brawls. Player 1: W/S. Player 2: Arrow Keys.
+- **The Data Webbing:** Every match generates a CSV file. Hit Export, and you hold the raw training data in your hands.
+- **Live Brain Scan:** Watch the model's confidence, current action, and win rate update in real-time on the AI Dashboard.
+- **Neural Web Visualizer:** See the input nodes (Ball X, Y, Velocity) physically *webbing* into the output decisions (UP / DOWN / STAY).
+- **Unlimited Suit Colors:** Change every color in the game. Paddles, ball, background, neon glow — customize the lab.
+
+---
+
+## 🧪 The Fusion Pipeline
+
+1. **You train the clone.** The browser logs `ball_x`, `ball_y`, `ball_dx`, `ball_dy`, `paddle_y`, and your `action` into a CSV.
+2. **The lab runs the math.** Google Colab takes the CSV and trains a Multi-Layer Perceptron (MLP) neural network using TensorFlow and Keras.
+3. **The symbiote jumps to the web.** The trained model converts to TensorFlow.js and deploys via Vercel.
+4. **The AI awakens.** The model reads live game state and decides: UP, DOWN, or STAY.
 
 ---
 
-## The Toolbox
+## 🛠️ The Arsenal
 
-- HTML5 / CSS3 / JavaScript
-- HTML5 Canvas (for 2D rendering)
-- TensorFlow.js (for in-browser AI inference)
-- Python / TensorFlow / Keras (for training in Google Colab)
-- Vercel (for hosting this chaos)
+| Tech | Role |
+| :--- | :--- |
+| HTML5, CSS3, JS | The interface, the lab |
+| HTML5 Canvas | 2D rendering engine |
+| TensorFlow.js | In-browser AI brain |
+| Python / TF / Keras | Model training in Colab |
+| Vercel | The multiverse deployer |
 
 ---
-Pong-game/
+Spider-Pong/
 ├── index.html # The lab interface
-├── style.css # Dark mode, neon edges, research lab aesthetic
-├── script.js # Game engine, ML wrapper, dashboard updates
-├── web_model/ # The trained brain
+├── style.css # Neon, dark, terminal-style UI
+├── script.js # Game engine + neural net wrapper
+├── web_model/ # The trained AI brain
 │ ├── model.json
 │ └── group1-shard1of1.bin
 └── README.md
@@ -66,51 +72,50 @@ Pong-game/
 
 ---
 
-## Let's see it (Screenshot)
+## 🖼️ The Multiverse Screenshot
 
-![AI Pong Lab Screenshot](link-to-your-screenshot-here)
+![Spider-Pong Screenshot](link-to-your-screenshot-here)
 
-Drop your screenshot into the repo and replace the link above.
+(Upload your screenshot to GitHub and replace the link above.)
 
 ---
 
-## How to run it (Local)
+## 🏃 How To Enter The Arena
 
-1. Clone the repo:
+1. Clone:
    `git clone https://github.com/furged/Pong-game.git`
 2. Double-click `index.html`.
-3. Pick your mode and break the AI's ego.
+3. Choose **Play vs AI** or **Multiplayer**.
 
-(Pro tip: Running locally bypasses the Vercel caching bug. The model will load instantly.)
-
----
-
-## What I actually learned
-
-- How to extract structured CSV data from a live browser canvas.
-- How to train an MLP Neural Network using Keras.
-- How to convert a Python-trained model to TensorFlow.js.
-- How to handle real-world deployment problems: CORS, WebGL handshake failures, and Vercel's aggressive caching.
+*Pro tip: Running locally bypasses the Vercel web-glitch. The AI will spawn instantly.*
 
 ---
 
-## The Known Bug (Don't ignore this)
+## 🧠 What The Lab Taught Me
 
-- The live Vercel build throws a `GraphModel`/`LayersModel` parsing error. It's a known TF.js quirk. The fix is in progress. For now, run it locally.
-
----
-
-## What's next (If I get bored)
-
-- Switch from GraphModel to LayersModel to fix the deployment.
-- Add a Q-Learning or DQN agent (true Reinforcement Learning, not just cloning).
-- Real-time accuracy tracking for the AI.
-- Compare stats between "Human Trained" and "RL Trained" opponents.
+- Building a full data pipeline: browser → CSV → Colab → TF.js.
+- Training an MLP neural net using Keras.
+- Converting Python models to browser-ready TensorFlow.js.
+- Fighting real-world deployment bugs: CORS, WebGL failures, and caching goblins.
 
 ---
 
-## Author
+## 🩹 Known Symbiote Glitch
 
-A Machine Learning engineering portfolio project.  
-GitHub: [furged](https://github.com/furged)
-## The Blueprint
+The live Vercel deployment throws a GraphModel / LayersModel parsing error. It’s a known TensorFlow.js quirk. I’m working on fixing the web-swing. For now, run it locally.
+
+---
+
+## 🔮 Next Mutation
+
+- Switch from GraphModel to LayersModel for proper deployment.
+- Add Q-Learning / DQN (true Reinforcement Learning).
+- Real-time accuracy tracking.
+- Pit "Human Trained" vs "RL Trained" opponents.
+
+---
+
+## 🕸️ Author
+
+A Machine Learning multiverse project by [furged](https://github.com/furged).
+## 📁 The Blueprint
