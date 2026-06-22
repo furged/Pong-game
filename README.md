@@ -74,7 +74,7 @@ Spider-Pong/
 
 ## 🖼️ The Multiverse Screenshot
 
-![Spider-Pong Screenshot](Pong-game/Screenshot.png)
+![Spider-Pong Screenshot](Screenshot.png)
 
 (Upload your screenshot to GitHub and replace the link above.)
 
