@@ -4,6 +4,9 @@ A behavioral cloning experiment where a Neural Network gets bitten by a radioact
 
 This is not a game. This is a multiverse training ground for AI agents.
 
+
+## 🛠️ The Arsenal
+
 ![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.0+-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
 ![TF.js](https://img.shields.io/badge/TF.js-4.22+-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
@@ -46,20 +49,6 @@ It’s a Spider-Verse crossover between **Classic Gaming** and **Behavioral Clon
 2. **The lab runs the math.** Google Colab takes the CSV and trains a Multi-Layer Perceptron (MLP) neural network using TensorFlow and Keras.
 3. **The symbiote jumps to the web.** The trained model converts to TensorFlow.js and deploys via Vercel.
 4. **The AI awakens.** The model reads live game state and decides: UP, DOWN, or STAY.
-
----
-
-## 🛠️ The Arsenal
-
-| Tech | Role |
-| :--- | :--- |
-| HTML5, CSS3, JS | The interface, the lab |
-| HTML5 Canvas | 2D rendering engine |
-| TensorFlow.js | In-browser AI brain |
-| Python / TF / Keras | Model training in Colab |
-| Vercel | The multiverse deployer |
-
----
 
 ---
 
