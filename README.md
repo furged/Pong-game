@@ -1,98 +1,65 @@
-# 🕸️ Spider-Pong: The Neural Net Fusion
+# 🕸️ AI Pong Lab
 
-A behavioral cloning experiment where a Neural Network gets bitten by a radioactive Pong ball, learns everything you do, and fights you in the arena.
+An interactive behavioral cloning experiment where a Neural Network learns to play Pong from human gameplay data.
 
-This is not a game. This is a multiverse training ground for AI agents.
+![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?style=flat-square&logo=python&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.0%2B-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)
+![TF.js](https://img.shields.io/badge/TF.js-4.22%2B-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)
+![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Prototype-yellow?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-
-## 🛠️ The Arsenal
-
-![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.0+-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
-![TF.js](https://img.shields.io/badge/TF.js-4.22+-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
-![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Prototype-yellow?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+> **Warning:** This is an active research prototype. The codebase is intended for experimentation, not production deployment.
 
 ---
 
-> 🕷️ **Web-Slinger Note:** The live deployment is currently glitching due to a TensorFlow.js symbiote bug. The AI refuses to wake up on Vercel. But run it locally — and the web-slinging begins instantly.
+## What is this?
+
+You play Pong. The game records your decisions. A Neural Network learns from your data and fights you in real-time.
+
+It's a simple demonstration of behavioral cloning — watching a human, then imitating them.
 
 ---
 
-## 🧬 The Origin Story
+## Features
 
-You play Pong. The game watches. Every frame, it writes down a diary:  
-*"Ball at X, moving Y, paddle at Z… Human pressed UP."*
-
-That diary becomes data. The data becomes a Neural Network.  
-The Neural Network becomes your opponent — a perfect clone of your playstyle.
-
-It’s a Spider-Verse crossover between **Classic Gaming** and **Behavioral Cloning**.
-
----
-
-## ⚡ Superpowers
-
-- **Spider-Sense AI:** The opponent paddle is driven by a neural network that mimics your own reflexes.
-- **Local Co-op Mode:** 2-player brawls. Player 1: W/S. Player 2: Arrow Keys.
-- **The Data Webbing:** Every match generates a CSV file. Hit Export, and you hold the raw training data in your hands.
-- **Live Brain Scan:** Watch the model's confidence, current action, and win rate update in real-time on the AI Dashboard.
-- **Neural Web Visualizer:** See the input nodes (Ball X, Y, Velocity) physically *webbing* into the output decisions (UP / DOWN / STAY).
-- **Unlimited Suit Colors:** Change every color in the game. Paddles, ball, background, neon glow — customize the lab.
+- **Play vs AI** – The opponent is driven by a trained Neural Network.
+- **Local Multiplayer** – 2 players (W/S and Arrow Keys).
+- **Data Collection** – Export every frame as a CSV for further training.
+- **Live Dashboard** – See AI confidence, action, and win rate update in real-time.
+- **Neural Network Visualizer** – Watch inputs (ball position, velocity) flow into outputs (UP/DOWN/STAY).
+- **Customizable UI** – Change paddle, ball, and background colors.
 
 ---
 
-## 🧪 The Fusion Pipeline
+## Tech Stack
 
-1. **You train the clone.** The browser logs `ball_x`, `ball_y`, `ball_dx`, `ball_dy`, `paddle_y`, and your `action` into a CSV.
-2. **The lab runs the math.** Google Colab takes the CSV and trains a Multi-Layer Perceptron (MLP) neural network using TensorFlow and Keras.
-3. **The symbiote jumps to the web.** The trained model converts to TensorFlow.js and deploys via Vercel.
-4. **The AI awakens.** The model reads live game state and decides: UP, DOWN, or STAY.
-
----
-
-## 🖼️ The Multiverse Screenshot
-
-![Spider-Pong Screenshot](Screenshot.png)
+- HTML5, CSS3, JavaScript (Frontend & Game Engine)
+- HTML5 Canvas (2D rendering)
+- TensorFlow.js (Browser-based inference)
+- Python, TensorFlow, Keras (Training in Google Colab)
+- Vercel (Live deployment)
 
 ---
 
-## 🏃 How To Enter The Arena
+## Screenshot
 
-1. Clone:
-   `git clone https://github.com/furged/Pong-game.git`
-2. Double-click `index.html`.
+![AI Pong Lab Screenshot](Screenshot.png)
+
+---
+
+## Run Locally
+
+1. Clone the repository:
+   git clone https://github.com/furged/Pong-game.git
+
+2. Open the folder and double-click `index.html`.
 3. Choose **Play vs AI** or **Multiplayer**.
 
-*Pro tip: Running locally bypasses the Vercel web-glitch. The AI will spawn instantly.*
+> **Note:** The live deployment has a known TensorFlow.js parser bug. Running locally bypasses this issue and loads the model instantly. The fix is tracked [here](https://github.com/furged/Pong-game/issues/1).
 
 ---
 
-## 🧠 What The Lab Taught Me
+## Author
 
-- Building a full data pipeline: browser → CSV → Colab → TF.js.
-- Training an MLP neural net using Keras.
-- Converting Python models to browser-ready TensorFlow.js.
-- Fighting real-world deployment bugs: CORS, WebGL failures, and caching goblins.
-
----
-
-## 🩹 Known Symbiote Glitch
-
-The live Vercel deployment throws a GraphModel / LayersModel parsing error. It’s a known TensorFlow.js quirk. I’m working on fixing the web-swing. For now, run it locally.
-
----
-
-## 🔮 Next Mutation
-
-- Switch from GraphModel to LayersModel for proper deployment.
-- Add Q-Learning / DQN (true Reinforcement Learning).
-- Real-time accuracy tracking.
-- Pit "Human Trained" vs "RL Trained" opponents.
-
----
-
-## 🕸️ Author
-
-A Machine Learning multiverse project by [furged](https://github.com/furged).
+Built as a Machine Learning portfolio project by [furged](https://github.com/furged).
