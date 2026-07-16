@@ -101,38 +101,41 @@ canvas {
 /* Mobile controls buttons */
 #mobile-controls {
     position: absolute;
-    bottom: 15px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: none;
     gap: 15px;
     z-index: 10;
-    background: rgba(0,0,0,0.6);
-    padding: 10px 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 12px 24px;
     border-radius: 30px;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
 }
 
 .mobile-btn {
     background: rgba(255,255,255,0.1);
     color: #fff;
     border: 1px solid rgba(255,255,255,0.2);
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    font-size: 20px;
+    font-size: 22px;
     cursor: pointer;
     transition: all 0.2s;
     touch-action: none;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .mobile-btn:active {
     transform: scale(0.9);
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.25);
+    border-color: rgba(255,255,255,0.4);
 }
 
 /* Menus */
@@ -142,14 +145,15 @@ canvas {
     left: 0; 
     width: 100%; 
     height: 100%; 
-    background: rgba(0, 0, 0, 0.85); 
+    background: rgba(0, 0, 0, 0.92);
     display: flex; 
     flex-direction: column; 
     justify-content: center; 
     align-items: center; 
     border-radius: 8px; 
-    backdrop-filter: blur(5px); 
+    backdrop-filter: blur(8px);
     z-index: 20;
+    padding: 20px;
 }
 
 .overlay h1 { 
@@ -172,10 +176,10 @@ canvas {
 }
 
 .menu-btn { 
-    background: transparent; 
+    background: rgba(255,255,255,0.05);
     color: #fff; 
     border: 1px solid rgba(0, 243, 255, 0.4); 
-    padding: 12px 30px; 
+    padding: 14px 30px; 
     margin: 8px; 
     font-size: 14px; 
     cursor: pointer; 
@@ -184,12 +188,14 @@ canvas {
     font-family: inherit; 
     letter-spacing: 1px;
     touch-action: manipulation;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
 }
 
 .menu-btn:hover { 
-    background: rgba(0, 243, 255, 0.1); 
+    background: rgba(0, 243, 255, 0.15); 
     border-color: #00f3ff; 
-    box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); 
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.15); 
     transform: scale(1.02); 
 }
 
@@ -203,7 +209,7 @@ canvas {
 
 .settings-btn:hover { 
     border-color: #ffaa00; 
-    box-shadow: 0 0 25px rgba(255, 170, 0, 0.2); 
+    box-shadow: 0 0 30px rgba(255, 170, 0, 0.15); 
 }
 
 .back-btn {
@@ -213,7 +219,7 @@ canvas {
 
 .back-btn:hover {
     border-color: #fff;
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
 }
 
 .setting-group {
@@ -439,17 +445,32 @@ canvas {
     }
     
     .overlay h1 {
-        font-size: 32px;
+        font-size: 36px;
+    }
+    
+    .overlay p {
+        font-size: 12px;
+        margin-bottom: 20px;
     }
     
     .menu-btn {
-        width: 180px;
-        padding: 10px 20px;
-        font-size: 12px;
+        width: 200px;
+        padding: 12px 20px;
+        font-size: 13px;
+        margin: 6px;
     }
     
     #mobile-controls {
         display: flex !important;
+        padding: 10px 18px;
+        gap: 12px;
+        bottom: 15px;
+    }
+    
+    .mobile-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
     }
     
     .controls-box div {
@@ -462,6 +483,10 @@ canvas {
     
     .setting-group {
         width: 200px;
+    }
+    
+    .overlay {
+        background: rgba(0, 0, 0, 0.95);
     }
 }
 
@@ -509,9 +534,9 @@ canvas {
     }
     
     .menu-btn {
-        width: 160px;
-        padding: 8px 16px;
-        font-size: 11px;
+        width: 180px;
+        padding: 10px 16px;
+        font-size: 12px;
         margin: 5px;
     }
     
@@ -532,11 +557,12 @@ canvas {
     #mobile-controls {
         gap: 10px;
         padding: 8px 15px;
+        bottom: 10px;
     }
     
     .mobile-btn {
-        width: 38px;
-        height: 38px;
-        font-size: 16px;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
     }
 }
