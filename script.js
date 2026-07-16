@@ -4,17 +4,17 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const menu = document.getElementById('menu-overlay');
 const settingsMenu = document.getElementById('settings-overlay');
-const wrapper = document.getElementById('gameWrapper');
 
-let settings = { 
-    colorA: '#00f3ff', 
-    colorB: '#ff0040', 
-    colorBall: '#ffffff', 
-    colorBg: '#000000' 
+let settings = {
+    colorA: '#00f3ff',
+    colorB: '#ff0040',
+    colorBall: '#ffffff',
+    colorBg: '#000000'
 };
 
 // Game state
-let scoreA = 0, scoreB = 0;
+let scoreA = 0,
+    scoreB = 0;
 let WIN_SCORE = 5;
 let INFINITE_MODE = false;
 let gameActive = false;
@@ -58,6 +58,10 @@ let longestRally = 0;
 let totalRallies = 0;
 let frameCount = 0;
 
+function isMobile() {
+    return window.innerWidth <= 768 || 'ontouchstart' in window;
+}
+
 function resetBallSpeed() {
     let angle;
     let attempts = 0;
@@ -67,12 +71,12 @@ function resetBallSpeed() {
     } while ((Math.abs(angle) < 0.2 || Math.abs(angle) > 0.5) && attempts < 20);
     if (Math.abs(angle) < 0.2) angle = 0.3;
     if (Math.abs(angle) > 0.5) angle = 0.4;
-    
+
     let speed = baseSpeed;
     let direction = Math.random() > 0.5 ? 1 : -1;
     ballDX = speed * Math.cos(angle) * direction;
     ballDY = speed * Math.sin(angle);
-    
+
     if (Math.abs(ballDY) < 1.2) {
         ballDY = (ballDY > 0 ? 1 : -1) * 1.5;
     }
@@ -93,29 +97,44 @@ function resetGame() {
     updateScoreDisplay();
     document.getElementById('game-status').innerText = '● PLAYING';
     document.getElementById('game-status').style.color = '#00ff00';
-    document.getElementById('frame-count').innerText = `Frames: 0`;
+    document.getElementById('frame-count').innerText = 'Frames: 0';
 }
 
 function startGame(mode) {
     const select = document.getElementById('winScoreSelect');
     WIN_SCORE = parseInt(select.value);
     INFINITE_MODE = (WIN_SCORE === 0);
-    
-    document.getElementById('win-target').innerText = INFINITE_MODE ? 'Target: ∞' : `Target: ${WIN_SCORE}`;
-    
+
+    document.getElementById('win-target').innerText = INFINITE_MODE ? 'Target: ∞' : 'Target: ' + WIN_SCORE;
+
     menu.style.display = 'none';
     settingsMenu.style.display = 'none';
     isAI = (mode === 'single');
     document.getElementById('game-mode').innerText = isAI ? 'VS BOT' : '2 PLAYER';
-    
-    if (isAI) {
-        document.getElementById('controls-info').innerHTML = 'YOU: ↑/↓ | BOT: Left';
-    } else {
-        document.getElementById('controls-info').innerHTML = 'P1: W/S | P2: ↑/↓';
-    }
-    
+
+    updateControlsInfo();
+
     resetGame();
     document.getElementById('game-status').innerText = '● PLAYING';
+}
+
+function updateControlsInfo() {
+    const mobile = isMobile();
+    const controlsEl = document.getElementById('controls-info');
+
+    if (isAI) {
+        if (mobile) {
+            controlsEl.innerHTML = 'YOU: Right side 👆👇 | BOT: Left';
+        } else {
+            controlsEl.innerHTML = 'YOU: ↑/↓ | BOT: Left';
+        }
+    } else {
+        if (mobile) {
+            controlsEl.innerHTML = 'P1: Left side 👆👇 | P2: Right side 👆👇';
+        } else {
+            controlsEl.innerHTML = 'P1: W/S | P2: ↑/↓';
+        }
+    }
 }
 
 function goToMainMenu() {
@@ -126,7 +145,7 @@ function goToMainMenu() {
 }
 
 function updateScoreDisplay() {
-    document.getElementById('score-display').innerText = `P1: ${scoreA} | P2: ${scoreB}`;
+    document.getElementById('score-display').innerText = 'P1: ' + scoreA + ' | P2: ' + scoreB;
 }
 
 function checkWinCondition() {
@@ -139,27 +158,27 @@ function checkWinCondition() {
 function handleGameEnd() {
     gamesPlayed++;
     document.getElementById('games-played').innerText = gamesPlayed;
-    
+
     if (currentRally > longestRally) {
         longestRally = currentRally;
         document.getElementById('longest-rally').innerText = longestRally;
     }
-    
+
     totalRallies += currentRally;
     currentRally = 0;
-    
+
     gameActive = false;
-    document.getElementById('game-status').innerText = `● GAME OVER`;
+    document.getElementById('game-status').innerText = '● GAME OVER';
     document.getElementById('game-status').style.color = '#ff0040';
 }
 
 function update() {
     if (!gameActive || gamePaused) return;
-    
+
     frameCount++;
-    document.getElementById('frame-count').innerText = `Frames: ${frameCount}`;
-    
-    // Touch controls - map touch position to paddle movement
+    document.getElementById('frame-count').innerText = 'Frames: ' + frameCount;
+
+    // TOUCH CONTROLS - Left paddle
     if (isTouchingLeft && touchLeftY !== null) {
         const rect = canvas.getBoundingClientRect();
         const canvasHeight = canvas.height;
@@ -168,7 +187,8 @@ function update() {
         paddleAY += (targetPaddleY - paddleAY) * 0.15;
         paddleAY = Math.max(-250, Math.min(250, paddleAY));
     }
-    
+
+    // TOUCH CONTROLS - Right paddle
     if (isTouchingRight && touchRightY !== null) {
         const rect = canvas.getBoundingClientRect();
         const canvasHeight = canvas.height;
@@ -177,38 +197,36 @@ function update() {
         paddleBY += (targetPaddleY - paddleBY) * 0.15;
         paddleBY = Math.max(-250, Math.min(250, paddleBY));
     }
-    
+
     // Keyboard controls
     if (isAI) {
         // Bot AI for left paddle
-        let targetY = ballY + (Math.random() - 0.5) * 40;
-        let diffY = targetY - (300 + paddleAY);
-        let aiSpeed = Math.min(5, Math.abs(diffY) * 0.1 + 1.5);
-        
-        if (diffY > 8) {
-            paddleAY = Math.min(250, paddleAY + aiSpeed);
-        } else if (diffY < -8) {
-            paddleAY = Math.max(-250, paddleAY - aiSpeed);
+        if (!isTouchingLeft) {
+            let targetY = ballY + (Math.random() - 0.5) * 40;
+            let diffY = targetY - (300 + paddleAY);
+            let aiSpeed = Math.min(5, Math.abs(diffY) * 0.1 + 1.5);
+
+            if (diffY > 8) {
+                paddleAY = Math.min(250, paddleAY + aiSpeed);
+            } else if (diffY < -8) {
+                paddleAY = Math.max(-250, paddleAY - aiSpeed);
+            }
         }
-        
-        // Right paddle controlled by keyboard OR touch
+
         if (upPressed) paddleBY = Math.max(-250, paddleBY - PLAYER_SPEED);
         if (downPressed) paddleBY = Math.min(250, paddleBY + PLAYER_SPEED);
-        
+
     } else {
-        // Multiplayer - left paddle
         if (wPressed) paddleAY = Math.max(-250, paddleAY - PLAYER_SPEED);
         if (sPressed) paddleAY = Math.min(250, paddleAY + PLAYER_SPEED);
-        
-        // Right paddle
         if (upPressed) paddleBY = Math.max(-250, paddleBY - PLAYER_SPEED);
         if (downPressed) paddleBY = Math.min(250, paddleBY + PLAYER_SPEED);
     }
-    
+
     // Ball movement
     ballX += ballDX;
     ballY += ballDY;
-    
+
     // Wall collisions
     if (ballY + BALL_RADIUS > 590) {
         ballY = 590 - BALL_RADIUS;
@@ -218,30 +236,30 @@ function update() {
         ballY = 10 + BALL_RADIUS;
         ballDY *= -1;
     }
-    
+
     // Paddle collisions
     let paddleA_abs_y = 300 + paddleAY;
-    if (ballX - BALL_RADIUS < PADDLE_A_X + PADDLE_W/2 && 
-        ballX + BALL_RADIUS > PADDLE_A_X - PADDLE_W/2 &&
-        ballY > paddleA_abs_y - PADDLE_H/2 && 
-        ballY < paddleA_abs_y + PADDLE_H/2) {
-        ballX = PADDLE_A_X + PADDLE_W/2 + BALL_RADIUS;
+    if (ballX - BALL_RADIUS < PADDLE_A_X + PADDLE_W / 2 &&
+        ballX + BALL_RADIUS > PADDLE_A_X - PADDLE_W / 2 &&
+        ballY > paddleA_abs_y - PADDLE_H / 2 &&
+        ballY < paddleA_abs_y + PADDLE_H / 2) {
+        ballX = PADDLE_A_X + PADDLE_W / 2 + BALL_RADIUS;
         ballDX = Math.abs(ballDX);
         increaseSpeed();
         currentRally++;
     }
-    
+
     let paddleB_abs_y = 300 + paddleBY;
-    if (ballX + BALL_RADIUS > PADDLE_B_X - PADDLE_W/2 && 
-        ballX - BALL_RADIUS < PADDLE_B_X + PADDLE_W/2 &&
-        ballY > paddleB_abs_y - PADDLE_H/2 && 
-        ballY < paddleB_abs_y + PADDLE_H/2) {
-        ballX = PADDLE_B_X - PADDLE_W/2 - BALL_RADIUS;
+    if (ballX + BALL_RADIUS > PADDLE_B_X - PADDLE_W / 2 &&
+        ballX - BALL_RADIUS < PADDLE_B_X + PADDLE_W / 2 &&
+        ballY > paddleB_abs_y - PADDLE_H / 2 &&
+        ballY < paddleB_abs_y + PADDLE_H / 2) {
+        ballX = PADDLE_B_X - PADDLE_W / 2 - BALL_RADIUS;
         ballDX = -Math.abs(ballDX);
         increaseSpeed();
         currentRally++;
     }
-    
+
     // Scoring
     if (ballX > 790) {
         scoreA++;
@@ -262,7 +280,7 @@ function update() {
 }
 
 function increaseSpeed() {
-    let mag = Math.sqrt(ballDX*ballDX + ballDY*ballDY);
+    let mag = Math.sqrt(ballDX * ballDX + ballDY * ballDY);
     if (mag < maxSpeed) {
         let angle = Math.atan2(ballDY, ballDX);
         mag += 0.3;
@@ -274,18 +292,18 @@ function increaseSpeed() {
 function resetRound() {
     ballX = 400;
     ballY = 300;
-    
+
     let angle = Math.atan2(ballDY, ballDX);
     let direction = ballDX > 0 ? -1 : 1;
     let speed = baseSpeed;
-    
+
     angle += (Math.random() - 0.5) * 0.4;
-    
+
     if (Math.abs(angle) < 0.15) angle = (angle > 0 ? 1 : -1) * 0.25;
-    
+
     ballDX = Math.cos(angle) * speed * direction;
     ballDY = Math.sin(angle) * speed;
-    
+
     if (Math.abs(ballDY) < 1.2) {
         ballDY = (ballDY > 0 ? 1 : -1) * 1.5;
     }
@@ -294,7 +312,7 @@ function resetRound() {
 function draw() {
     ctx.fillStyle = settings.colorBg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     ctx.strokeStyle = 'rgba(255,255,255,0.2)';
     ctx.setLineDash([10, 15]);
     ctx.beginPath();
@@ -302,23 +320,23 @@ function draw() {
     ctx.lineTo(400, 600);
     ctx.stroke();
     ctx.setLineDash([]);
-    
+
     ctx.beginPath();
     ctx.arc(400, 300, 60, 0, Math.PI * 2);
     ctx.strokeStyle = 'rgba(255,255,255,0.1)';
     ctx.stroke();
-    
+
     ctx.fillStyle = settings.colorA;
     ctx.shadowColor = settings.colorA;
     ctx.shadowBlur = 15;
-    ctx.fillRect(PADDLE_A_X - PADDLE_W/2, 300 + paddleAY - PADDLE_H/2, PADDLE_W, PADDLE_H);
-    
+    ctx.fillRect(PADDLE_A_X - PADDLE_W / 2, 300 + paddleAY - PADDLE_H / 2, PADDLE_W, PADDLE_H);
+
     ctx.fillStyle = settings.colorB;
     ctx.shadowColor = settings.colorB;
     ctx.shadowBlur = 15;
-    ctx.fillRect(PADDLE_B_X - PADDLE_W/2, 300 + paddleBY - PADDLE_H/2, PADDLE_W, PADDLE_H);
+    ctx.fillRect(PADDLE_B_X - PADDLE_W / 2, 300 + paddleBY - PADDLE_H / 2, PADDLE_W, PADDLE_H);
     ctx.shadowBlur = 0;
-    
+
     ctx.beginPath();
     ctx.arc(ballX, ballY, BALL_RADIUS, 0, Math.PI * 2);
     ctx.fillStyle = settings.colorBall;
@@ -327,15 +345,15 @@ function draw() {
     ctx.fill();
     ctx.closePath();
     ctx.shadowBlur = 0;
-    
+
     ctx.fillStyle = 'rgba(255,255,255,0.8)';
     ctx.font = '48px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    
+
     if (isAI) {
         ctx.fillText(scoreA, 180, 80);
         ctx.fillText(scoreB, 620, 80);
-        
+
         ctx.font = '12px "JetBrains Mono", monospace';
         ctx.fillStyle = 'rgba(255,255,255,0.3)';
         ctx.fillText('BOT', 180, 110);
@@ -343,23 +361,23 @@ function draw() {
     } else {
         ctx.fillText(scoreA, 180, 80);
         ctx.fillText(scoreB, 620, 80);
-        
+
         ctx.font = '12px "JetBrains Mono", monospace';
         ctx.fillStyle = 'rgba(255,255,255,0.3)';
         ctx.fillText('P1', 180, 110);
         ctx.fillText('P2', 620, 110);
     }
-    
+
     ctx.fillStyle = 'rgba(255,255,255,0.1)';
     ctx.font = '14px "JetBrains Mono", monospace';
-    ctx.fillText(INFINITE_MODE ? '∞' : `TO ${WIN_SCORE}`, 400, 560);
-    
+    ctx.fillText(INFINITE_MODE ? '∞' : 'TO ' + WIN_SCORE, 400, 560);
+
     if (currentRally > 5) {
         ctx.fillStyle = 'rgba(255,255,255,0.2)';
         ctx.font = '14px "JetBrains Mono", monospace';
-        ctx.fillText(`RALLY: ${currentRally}`, 400, 570);
+        ctx.fillText('RALLY: ' + currentRally, 400, 570);
     }
-    
+
     if (gamePaused) {
         ctx.fillStyle = 'rgba(0,0,0,0.7)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -371,7 +389,7 @@ function draw() {
         ctx.fillStyle = 'rgba(255,255,255,0.5)';
         ctx.fillText('Press P to resume', 400, 350);
     }
-    
+
     if (!gameActive && !gamePaused && menu.style.display === 'none') {
         ctx.fillStyle = 'rgba(0,0,0,0.75)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -402,10 +420,8 @@ function togglePause() {
 }
 
 function restartGame() {
-    if (gameActive || !gameActive) {
-        resetGame();
-        gamePaused = false;
-    }
+    resetGame();
+    gamePaused = false;
 }
 
 function toggleSettings() {
@@ -439,7 +455,7 @@ const touchRight = document.getElementById('touch-right');
 function handleTouchStart(e, side) {
     e.preventDefault();
     const touch = e.touches[0];
-    
+
     if (side === 'left') {
         isTouchingLeft = true;
         touchLeftY = touch.clientY;
@@ -452,7 +468,7 @@ function handleTouchStart(e, side) {
 function handleTouchMove(e, side) {
     e.preventDefault();
     const touch = e.touches[0];
-    
+
     if (side === 'left') {
         touchLeftY = touch.clientY;
     } else {
@@ -471,13 +487,11 @@ function handleTouchEnd(e, side) {
     }
 }
 
-// Left touch zone events
 touchLeft.addEventListener('touchstart', (e) => handleTouchStart(e, 'left'));
 touchLeft.addEventListener('touchmove', (e) => handleTouchMove(e, 'left'));
 touchLeft.addEventListener('touchend', (e) => handleTouchEnd(e, 'left'));
 touchLeft.addEventListener('touchcancel', (e) => handleTouchEnd(e, 'left'));
 
-// Right touch zone events
 touchRight.addEventListener('touchstart', (e) => handleTouchStart(e, 'right'));
 touchRight.addEventListener('touchmove', (e) => handleTouchMove(e, 'right'));
 touchRight.addEventListener('touchend', (e) => handleTouchEnd(e, 'right'));
@@ -485,15 +499,21 @@ touchRight.addEventListener('touchcancel', (e) => handleTouchEnd(e, 'right'));
 
 // Mobile buttons
 document.getElementById('mobilePause').addEventListener('click', togglePause);
-document.getElementById('mobileRestart').addEventListener('click', restartGame);
-document.getElementById('mobileMenu').addEventListener('click', goToMainMenu);
+document.getElementById('mobilePause').addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    togglePause();
+});
 
-// Also support touch on buttons
-document.querySelectorAll('.mobile-btn').forEach(btn => {
-    btn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        btn.click();
-    });
+document.getElementById('mobileRestart').addEventListener('click', restartGame);
+document.getElementById('mobileRestart').addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    restartGame();
+});
+
+document.getElementById('mobileMenu').addEventListener('click', goToMainMenu);
+document.getElementById('mobileMenu').addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    goToMainMenu();
 });
 
 // Keyboard events
@@ -528,6 +548,11 @@ document.addEventListener('keyup', (e) => {
         downPressed = false;
         e.preventDefault();
     }
+});
+
+// Handle window resize
+window.addEventListener('resize', function() {
+    updateControlsInfo();
 });
 
 gameLoop();

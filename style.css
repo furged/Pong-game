@@ -1,7 +1,7 @@
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -15,90 +15,72 @@ body {
     -webkit-user-select: none;
 }
 
-.app-container { 
-    display: flex; 
-    height: 100vh; 
-    width: 100vw; 
-    background: #0a0b0e; 
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    background: #0a0b0e;
 }
 
-.arena-wrapper { 
-    flex: 0 0 65%; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    padding: 20px; 
-    border-right: 1px solid rgba(0, 255, 255, 0.15); 
-}
-
-.dashboard-wrapper { 
-    flex: 1; 
-    padding: 20px; 
-    display: flex; 
-    flex-direction: column; 
-    background: rgba(18, 20, 29, 0.6); 
-    overflow-y: auto; 
-}
-
-#gameWrapper { 
-    position: relative; 
-    background: #111; 
-    border: 1px solid #333; 
-    border-radius: 8px; 
-    box-shadow: 0 0 30px rgba(0, 150, 255, 0.1); 
-    width: 100%;
-    max-width: 800px;
-}
-
-canvas { 
-    display: block; 
-    background: #000; 
-    width: 100%; 
-    height: auto; 
-    max-height: 80vh;
-    touch-action: none;
-}
-
-/* Touch zones - positioned OUTSIDE the canvas on the sides */
-.touch-zone {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 60px;
-    z-index: 5;
-    touch-action: none;
+.arena-wrapper {
+    flex: 0 0 65%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
-    opacity: 0.3;
-    transition: opacity 0.3s;
+    padding: 20px;
+    border-right: 1px solid rgba(0, 255, 255, 0.15);
 }
 
-.touch-zone:active {
-    opacity: 0.6;
+.dashboard-wrapper {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(18, 20, 29, 0.6);
+    overflow-y: auto;
 }
 
-.touch-label {
-    color: #00f3ff;
-    font-size: 24px;
-    pointer-events: none;
-    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+#gameWrapper {
+    position: relative;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0, 150, 255, 0.1);
+    width: 100%;
+    max-width: 800px;
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+    background: #000;
+    width: 100%;
+    height: auto;
+    touch-action: none;
+}
+
+/* TOUCH ZONES - INSIDE THE GAME BUT ON THE SIDES */
+.touch-zone {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    z-index: 5;
+    touch-action: none;
 }
 
 #touch-left {
-    left: -60px;
-    border-right: 2px solid rgba(0, 243, 255, 0.2);
+    left: 0;
+    background: rgba(0, 243, 255, 0.03);
 }
 
 #touch-right {
-    right: -60px;
-    border-left: 2px solid rgba(255, 0, 64, 0.2);
+    right: 0;
+    background: rgba(255, 0, 64, 0.03);
 }
 
-/* Mobile controls buttons */
+/* MOBILE CONTROL BUTTONS */
 #mobile-controls {
     position: absolute;
     bottom: 20px;
@@ -107,60 +89,56 @@ canvas {
     display: none;
     gap: 15px;
     z-index: 10;
-    background: rgba(0,0,0,0.8);
-    padding: 12px 24px;
-    border-radius: 30px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 12px 20px;
+    border-radius: 50px;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.15);
-    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .mobile-btn {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     color: #fff;
-    border: 1px solid rgba(255,255,255,0.2);
-    width: 48px;
-    height: 48px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    font-size: 22px;
+    font-size: 20px;
     cursor: pointer;
-    transition: all 0.2s;
-    touch-action: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    touch-action: manipulation;
 }
 
 .mobile-btn:active {
     transform: scale(0.9);
-    background: rgba(255,255,255,0.25);
-    border-color: rgba(255,255,255,0.4);
+    background: rgba(255, 255, 255, 0.2);
 }
 
-/* Menus */
-.overlay { 
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
+/* OVERLAYS */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.92);
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    border-radius: 8px; 
-    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
     z-index: 20;
-    padding: 20px;
+    padding: 30px;
+    backdrop-filter: blur(5px);
 }
 
-.overlay h1 { 
-    color: #00f3ff; 
-    font-size: 48px; 
-    margin-bottom: 10px; 
-    text-shadow: 0 0 40px rgba(0, 243, 255, 0.3); 
+.overlay h1 {
+    color: #00f3ff;
+    font-size: 48px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 40px rgba(0, 243, 255, 0.3);
 }
 
 .overlay p {
@@ -169,47 +147,45 @@ canvas {
     margin-bottom: 30px;
 }
 
-.overlay h2 { 
-    color: #fff; 
-    font-size: 24px; 
-    margin-bottom: 20px; 
+.overlay h2 {
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
-.menu-btn { 
-    background: rgba(255,255,255,0.05);
-    color: #fff; 
-    border: 1px solid rgba(0, 243, 255, 0.4); 
-    padding: 14px 30px; 
-    margin: 8px; 
-    font-size: 14px; 
-    cursor: pointer; 
-    transition: 0.3s; 
-    width: 220px; 
-    font-family: inherit; 
+.menu-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border: 1px solid rgba(0, 243, 255, 0.4);
+    padding: 14px 30px;
+    margin: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 220px;
+    font-family: inherit;
     letter-spacing: 1px;
-    touch-action: manipulation;
     border-radius: 4px;
-    backdrop-filter: blur(4px);
+    transition: all 0.3s;
 }
 
-.menu-btn:hover { 
-    background: rgba(0, 243, 255, 0.15); 
-    border-color: #00f3ff; 
-    box-shadow: 0 0 30px rgba(0, 243, 255, 0.15); 
-    transform: scale(1.02); 
+.menu-btn:hover {
+    background: rgba(0, 243, 255, 0.15);
+    border-color: #00f3ff;
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+    transform: scale(1.02);
 }
 
 .menu-btn:active {
     transform: scale(0.95);
 }
 
-.settings-btn { 
-    border-color: rgba(255, 170, 0, 0.4); 
+.settings-btn {
+    border-color: rgba(255, 170, 0, 0.4);
 }
 
-.settings-btn:hover { 
-    border-color: #ffaa00; 
-    box-shadow: 0 0 30px rgba(255, 170, 0, 0.15); 
+.settings-btn:hover {
+    border-color: #ffaa00;
+    box-shadow: 0 0 30px rgba(255, 170, 0, 0.15);
 }
 
 .back-btn {
@@ -239,7 +215,7 @@ canvas {
 .setting-group input[type="color"] {
     width: 40px;
     height: 40px;
-    border: 2px solid rgba(255,255,255,0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 4px;
     background: transparent;
     cursor: pointer;
@@ -248,7 +224,7 @@ canvas {
 .setting-group select {
     background: #1a1a2e;
     color: #fff;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 8px 15px;
     border-radius: 4px;
     font-family: 'JetBrains Mono', monospace;
@@ -267,14 +243,14 @@ canvas {
     color: #fff;
 }
 
-/* Dashboard */
-.dashboard-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    border-bottom: 1px solid rgba(255,255,255,0.1); 
-    padding-bottom: 15px; 
-    margin-bottom: 20px; 
+/* DASHBOARD */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .dashboard-header h3 {
@@ -283,58 +259,57 @@ canvas {
     color: #aaa;
 }
 
-.status-badge { 
-    font-size: 10px; 
-    color: #00ff00; 
-    background: rgba(0,255,0,0.1); 
-    padding: 4px 14px; 
-    border-radius: 20px; 
-    border: 1px solid rgba(0,255,0,0.2); 
+.status-badge {
+    font-size: 10px;
+    color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 0, 0.2);
 }
 
-.metrics-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 15px; 
-    margin-bottom: 25px; 
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
-.metric-card { 
-    background: rgba(255,255,255,0.03); 
-    border: 1px solid rgba(255,255,255,0.05); 
-    padding: 15px; 
-    border-radius: 6px; 
+.metric-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 6px;
 }
 
-.metric-card label { 
-    display: block; 
-    font-size: 10px; 
-    color: #666; 
-    margin-bottom: 5px; 
-    text-transform: uppercase; 
-    letter-spacing: 1px; 
+.metric-card label {
+    display: block;
+    font-size: 10px;
+    color: #666;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.metric-card span { 
-    font-size: 20px; 
-    font-weight: 700; 
-    color: #00f3ff; 
+.metric-card span {
+    font-size: 20px;
+    font-weight: 700;
+    color: #00f3ff;
 }
 
-/* Controls box */
-.viz-wrapper { 
-    background: rgba(0,0,0,0.4); 
-    border-radius: 8px; 
-    padding: 20px; 
-    border: 1px solid rgba(255,255,255,0.05); 
-    margin-top: 10px; 
+.viz-wrapper {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 10px;
 }
 
-.viz-wrapper h4 { 
-    font-size: 11px; 
-    color: #666; 
-    margin-bottom: 15px; 
-    letter-spacing: 2px; 
+.viz-wrapper h4 {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 15px;
+    letter-spacing: 2px;
 }
 
 .controls-box {
@@ -353,23 +328,22 @@ canvas {
     color: #00f3ff;
 }
 
-/* Control bar */
-.control-bar { 
-    width: 100%; 
-    max-width: 800px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-top: 15px; 
-    padding: 0 10px; 
+.control-bar {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 0 10px;
     flex-wrap: wrap;
     gap: 10px;
 }
 
-.mono-text { 
-    font-size: 14px; 
-    color: #888; 
-    font-family: inherit; 
+.mono-text {
+    font-size: 14px;
+    color: #888;
+    font-family: inherit;
     letter-spacing: 1px;
 }
 
@@ -378,115 +352,75 @@ canvas {
     font-weight: 700;
 }
 
-/* Mobile responsive */
+/* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
     .app-container {
         flex-direction: column;
     }
-    
+
     .arena-wrapper {
         flex: 1;
         padding: 10px;
         border-right: none;
         border-bottom: 1px solid rgba(0, 255, 255, 0.15);
     }
-    
+
     .dashboard-wrapper {
         flex: 0 0 auto;
-        max-height: 40vh;
-        padding: 15px;
+        max-height: 35vh;
+        padding: 12px;
     }
-    
+
     .touch-zone {
+        width: 50%;
+    }
+
+    #mobile-controls {
+        display: flex !important;
+        bottom: 15px;
+        padding: 10px 16px;
+        gap: 12px;
+    }
+
+    .mobile-btn {
         width: 40px;
-    }
-    
-    #touch-left {
-        left: -40px;
-    }
-    
-    #touch-right {
-        right: -40px;
-    }
-    
-    .touch-label {
+        height: 40px;
         font-size: 18px;
     }
-    
-    .dashboard-header h3 {
-        font-size: 12px;
-    }
-    
-    .metrics-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-    
-    .metric-card {
-        padding: 10px;
-    }
-    
-    .metric-card span {
-        font-size: 16px;
-    }
-    
-    .metric-card label {
-        font-size: 9px;
-    }
-    
-    .control-bar {
-        font-size: 12px;
-        padding: 0 5px;
-        gap: 5px;
-    }
-    
-    .mono-text {
-        font-size: 12px;
-    }
-    
+
     .overlay h1 {
         font-size: 36px;
     }
-    
-    .overlay p {
-        font-size: 12px;
-        margin-bottom: 20px;
-    }
-    
+
     .menu-btn {
         width: 200px;
         padding: 12px 20px;
         font-size: 13px;
         margin: 6px;
     }
-    
-    #mobile-controls {
-        display: flex !important;
-        padding: 10px 18px;
-        gap: 12px;
-        bottom: 15px;
+
+    .metrics-grid {
+        gap: 10px;
     }
-    
-    .mobile-btn {
-        width: 44px;
-        height: 44px;
-        font-size: 20px;
+
+    .metric-card {
+        padding: 10px;
     }
-    
-    .controls-box div {
-        font-size: 11px;
+
+    .metric-card span {
+        font-size: 16px;
     }
-    
-    .viz-wrapper {
-        padding: 12px;
+
+    .mono-text {
+        font-size: 12px;
     }
-    
+
     .setting-group {
         width: 200px;
     }
-    
-    .overlay {
-        background: rgba(0, 0, 0, 0.95);
+
+    .controls-box div {
+        font-size: 11px;
     }
 }
 
@@ -494,75 +428,82 @@ canvas {
     .arena-wrapper {
         padding: 5px;
     }
-    
+
     .dashboard-wrapper {
-        padding: 10px;
-        max-height: 35vh;
-    }
-    
-    .touch-zone {
-        width: 30px;
-    }
-    
-    #touch-left {
-        left: -30px;
-    }
-    
-    #touch-right {
-        right: -30px;
-    }
-    
-    .touch-label {
-        font-size: 14px;
-    }
-    
-    .metrics-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 5px;
-    }
-    
-    .metric-card {
         padding: 8px;
+        max-height: 30vh;
     }
-    
-    .metric-card span {
-        font-size: 14px;
-    }
-    
+
     .overlay h1 {
         font-size: 28px;
     }
-    
+
+    .overlay p {
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+
     .menu-btn {
-        width: 180px;
+        width: 170px;
         padding: 10px 16px;
         font-size: 12px;
         margin: 5px;
     }
-    
+
+    #mobile-controls {
+        padding: 8px 14px;
+        gap: 10px;
+        bottom: 10px;
+    }
+
+    .mobile-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+    }
+
+    .metric-card {
+        padding: 8px;
+    }
+
+    .metric-card span {
+        font-size: 14px;
+    }
+
+    .metric-card label {
+        font-size: 8px;
+    }
+
+    .control-bar {
+        gap: 5px;
+        padding: 0 5px;
+    }
+
+    .mono-text {
+        font-size: 10px;
+    }
+
     .setting-group {
         width: 160px;
     }
-    
+
     .setting-group label {
         font-size: 10px;
     }
-    
+
     .setting-group select {
         font-size: 12px;
         padding: 5px 10px;
         width: 80px;
     }
-    
-    #mobile-controls {
-        gap: 10px;
-        padding: 8px 15px;
-        bottom: 10px;
-    }
-    
-    .mobile-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
+
+    .setting-group input[type="color"] {
+        width: 32px;
+        height: 32px;
     }
 }

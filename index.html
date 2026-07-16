@@ -13,23 +13,18 @@
             <div id="gameWrapper">
                 <canvas id="gameCanvas" width="800" height="600"></canvas>
                 
-                <!-- Mobile touch controls - OUTSIDE the canvas -->
-                <div id="touch-left" class="touch-zone">
-                    <div class="touch-label">▲</div>
-                    <div class="touch-label">▼</div>
-                </div>
-                <div id="touch-right" class="touch-zone">
-                    <div class="touch-label">▲</div>
-                    <div class="touch-label">▼</div>
-                </div>
+                <!-- MOBILE TOUCH ZONES - INSIDE THE GAME AREA BUT ON THE SIDES -->
+                <div id="touch-left" class="touch-zone"></div>
+                <div id="touch-right" class="touch-zone"></div>
                 
-                <!-- Mobile controls overlay -->
+                <!-- MOBILE CONTROLS -->
                 <div id="mobile-controls">
                     <button class="mobile-btn" id="mobilePause">⏸</button>
                     <button class="mobile-btn" id="mobileRestart">↻</button>
                     <button class="mobile-btn" id="mobileMenu">☰</button>
                 </div>
                 
+                <!-- MENU OVERLAY -->
                 <div id="menu-overlay" class="overlay">
                     <h1>PONG</h1>
                     <p>Classic Pong</p>
@@ -38,6 +33,7 @@
                     <button class="menu-btn settings-btn" onclick="toggleSettings()">⚙️ SETTINGS</button>
                 </div>
 
+                <!-- SETTINGS OVERLAY -->
                 <div id="settings-overlay" class="overlay" style="display:none;">
                     <h2>⚙️ Settings</h2>
                     <div class="setting-group">
@@ -96,7 +92,7 @@
                 <h4>CONTROLS</h4>
                 <div class="controls-box">
                     <div><strong>Desktop:</strong> P1: W/S | P2: ↑/↓</div>
-                    <div><strong>Mobile:</strong> Touch left/right edges of screen</div>
+                    <div><strong>Mobile:</strong> Touch left/right edges</div>
                     <div><strong>Game:</strong> P (pause) / R (restart) / M (menu)</div>
                 </div>
             </div>
