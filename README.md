@@ -1,20 +1,23 @@
-# PONG
+<h1 align="center">PONG</h1>
 
-![HTML5](https://img.shields.io/badge/HTML5-Canvas-E34F26?logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-Responsive-1572B6?logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=black)
-![No Build Step](https://img.shields.io/badge/Build%20Step-None-brightgreen)
+<p align="center">
+  <img src="https://img.shields.io/badge/HTML5-Canvas-E34F26?logo=html5&logoColor=white">
+  <img src="https://img.shields.io/badge/CSS3-Responsive-1572B6?logo=css3&logoColor=white">
+  <img src="https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=black">
+  <img src="https://img.shields.io/badge/Game%20Loop-60FPS-success">
+  <img src="https://img.shields.io/badge/Touch-Multi--Touch-8A2BE2">
+</p>
 
-Two paddles, one ball, a bot with commitment issues, and a terminal-style dashboard that watches the whole thing like it's monitoring a server rack. It's Pong. You already know the rules. This doc is about the plumbing.
+<p align="center">
+  Two paddles, one ball, a bot with commitment issues, and a terminal-style dashboard that watches the whole thing like it's monitoring a server rack.
+  <br>
+  It's Pong. You already know the rules. This doc is about the plumbing.
+</p>
 
-
-
-**Play it here:** [https://furged-pong.vercel.app/](https://furged-pong.vercel.app/)
-
-
-## Screenshot
-
-![Pong screenshot](./Screenshot.png)
+<p align="center">
+  <strong>Play it here:</strong>
+  <a href="https://furged-pong.vercel.app/">furged-pong.vercel.app</a>
+</p>
 
 ## Gameplay, briefly
 
@@ -79,6 +82,10 @@ Tuned to trigger a handful of times per game, max. Enough that it feels like the
 - Canvas is sized by **height** on mobile instead of width, a width-constrained 4:3 canvas on a tall phone leaves dead space above and below it like a letterboxed movie nobody asked for.
 - `touch-action` is scoped per element, not slapped on `<body>`. Turns out its *effective* value is the intersection of an element and every ancestor's value, set `none` globally and you've quietly killed scrolling on the entire page, dashboard included, and spend an hour wondering why.
 - Sidebar control hints swap between keyboard and touch text depending on device, so mobile users aren't told to press ↑/↓ on a screen with no keys on it.
+
+## Screenshot
+
+![Pong screenshot](./Screenshot.png)
 
 ## Where it started
 
