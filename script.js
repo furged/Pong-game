@@ -58,6 +58,12 @@ let isTouchingRight = false;
 let leftTouchId = null;
 let rightTouchId = null;
 
+// Bot "mistake" state - lets the bot occasionally misjudge the ball so it
+// doesn't win every single game. See the AI block in update() for how this
+// is used.
+let botMistakeTimer = 0;   // frames left in the current mistake, 0 = tracking normally
+let botMistakeOffset = 0;  // how far off-target the bot currently aims
+
 // Stats
 let gamesPlayed = 0;
 let currentRally = 0;
@@ -94,6 +100,8 @@ function resetGame() {
     scoreB = 0;
     paddleAY = 0;
     paddleBY = 0;
+    botMistakeTimer = 0;
+    botMistakeOffset = 0;
     ballX = 400;
     ballY = 300;
     resetBallSpeed();
@@ -131,13 +139,13 @@ function updateControlsInfo() {
 
     if (isAI) {
         if (mobile) {
-            controlsEl.innerHTML = 'YOU: Right side 👆👇 | BOT: Left';
+            controlsEl.innerHTML = 'YOU: Right side ↑↓ | BOT: Left';
         } else {
             controlsEl.innerHTML = 'YOU: ↑/↓ | BOT: Left';
         }
     } else {
         if (mobile) {
-            controlsEl.innerHTML = 'P1: Left side 👆👇 | P2: Right side 👆👇';
+            controlsEl.innerHTML = 'P1: Left side ↑↓ | P2: Right side ↑↓';
         } else {
             controlsEl.innerHTML = 'P1: W/S | P2: ↑/↓';
         }
@@ -209,7 +217,19 @@ function update() {
     if (isAI) {
         // Bot AI for left paddle
         if (!isTouchingLeft) {
-            let targetY = ballY + (Math.random() - 0.5) * 40;
+            // Rare, short "mistake" window: normally counts down; a small
+            // per-frame chance starts a new one when not already active.
+            // At 60fps this triggers roughly once every ~20-30 seconds on
+            // average, so the bot loses focus every so often rather than
+            // constantly - just enough to make it beatable.
+            if (botMistakeTimer > 0) {
+                botMistakeTimer--;
+            } else if (Math.random() < 0.0005) {
+                botMistakeTimer = 20 + Math.floor(Math.random() * 20); // ~0.3-0.6s
+                botMistakeOffset = (Math.random() < 0.5 ? -1 : 1) * (90 + Math.random() * 80);
+            }
+
+            let targetY = ballY + (Math.random() - 0.5) * 40 + botMistakeOffset;
             let diffY = targetY - (300 + paddleAY);
             let aiSpeed = Math.min(5, Math.abs(diffY) * 0.1 + 1.5);
 
@@ -405,7 +425,7 @@ function draw() {
         ctx.textAlign = 'center';
         let winner;
         if (isAI) {
-            winner = scoreA >= WIN_SCORE ? 'BOT WINS!' : 'YOU WIN! 🎉';
+            winner = scoreA >= WIN_SCORE ? 'BOT WINS!' : 'YOU WIN!';
         } else {
             winner = scoreA >= WIN_SCORE ? 'P1 WINS!' : 'P2 WINS!';
         }

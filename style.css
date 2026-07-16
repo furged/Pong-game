@@ -9,8 +9,14 @@ body {
     font-family: 'JetBrains Mono', monospace;
     overflow: hidden;
     height: 100vh;
+    height: 100dvh; /* accounts for mobile browser toolbar showing/hiding */
     color: #e0e0e0;
-    touch-action: none;
+    /* was touch-action: none, which (because touch-action's *used* value is
+       the intersection of an element's value and all its ancestors') blocked
+       ALL touch scrolling on the page, including inside .dashboard-wrapper's
+       "CONTROLS" panel. pan-y still blocks pinch-zoom/double-tap-zoom
+       (so the game stays locked at 100%) but allows normal vertical scroll. */
+    touch-action: pan-y;
     user-select: none;
     -webkit-user-select: none;
 }
@@ -18,6 +24,7 @@ body {
 .app-container {
     display: flex;
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
     background: #0a0b0e;
 }
@@ -367,6 +374,21 @@ canvas {
         padding: 10px;
         border-right: none;
         border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+        min-height: 0; /* lets this flex child actually size to its real available space */
+    }
+
+    #gameWrapper {
+        width: auto;
+        flex: 1;
+        min-height: 0;
+        max-width: 100%;
+    }
+
+    canvas {
+        width: auto;
+        height: 100%;
+        max-width: 100%;
+        margin: 0 auto;
     }
 
     .dashboard-wrapper {
