@@ -50,6 +50,13 @@ let touchLeftY = null;
 let touchRightY = null;
 let isTouchingLeft = false;
 let isTouchingRight = false;
+// Track the specific touch.identifier assigned to each zone so that a
+// second finger touching the other side doesn't get confused with, or
+// cancel, the first finger's touch (the old code just grabbed e.touches[0],
+// which is the first touch anywhere on the whole screen, not the touch
+// that actually belongs to that zone).
+let leftTouchId = null;
+let rightTouchId = null;
 
 // Stats
 let gamesPlayed = 0;
@@ -454,36 +461,67 @@ const touchRight = document.getElementById('touch-right');
 
 function handleTouchStart(e, side) {
     e.preventDefault();
-    const touch = e.touches[0];
+    // changedTouches holds only the touch(es) that just started; grab the
+    // first new one for this zone and remember its identifier so future
+    // move/end events can be matched back to THIS finger specifically.
+    const touch = e.changedTouches[0];
+    if (!touch) return;
 
     if (side === 'left') {
-        isTouchingLeft = true;
-        touchLeftY = touch.clientY;
+        if (leftTouchId === null) {
+            leftTouchId = touch.identifier;
+            isTouchingLeft = true;
+            touchLeftY = touch.clientY;
+        }
     } else {
-        isTouchingRight = true;
-        touchRightY = touch.clientY;
+        if (rightTouchId === null) {
+            rightTouchId = touch.identifier;
+            isTouchingRight = true;
+            touchRightY = touch.clientY;
+        }
     }
 }
 
 function handleTouchMove(e, side) {
     e.preventDefault();
-    const touch = e.touches[0];
+    const trackedId = side === 'left' ? leftTouchId : rightTouchId;
+    if (trackedId === null) return;
 
-    if (side === 'left') {
-        touchLeftY = touch.clientY;
-    } else {
-        touchRightY = touch.clientY;
+    // Find the touch matching this zone's tracked identifier among all
+    // touches currently changing, so the other finger's movement can't
+    // leak in and override this paddle's position.
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        if (touch.identifier === trackedId) {
+            if (side === 'left') {
+                touchLeftY = touch.clientY;
+            } else {
+                touchRightY = touch.clientY;
+            }
+            break;
+        }
     }
 }
 
 function handleTouchEnd(e, side) {
     e.preventDefault();
-    if (side === 'left') {
-        isTouchingLeft = false;
-        touchLeftY = null;
-    } else {
-        isTouchingRight = false;
-        touchRightY = null;
+    const trackedId = side === 'left' ? leftTouchId : rightTouchId;
+    if (trackedId === null) return;
+
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        if (touch.identifier === trackedId) {
+            if (side === 'left') {
+                isTouchingLeft = false;
+                touchLeftY = null;
+                leftTouchId = null;
+            } else {
+                isTouchingRight = false;
+                touchRightY = null;
+                rightTouchId = null;
+            }
+            break;
+        }
     }
 }
 
@@ -554,5 +592,10 @@ document.addEventListener('keyup', (e) => {
 window.addEventListener('resize', function() {
     updateControlsInfo();
 });
+
+// Set the correct controls text immediately on load (previously this only
+// ran on startGame()/resize, so mobile visitors saw the desktop "P1: W/S |
+// P2: ↑/↓" text in the sidebar until they started a game).
+updateControlsInfo();
 
 gameLoop();

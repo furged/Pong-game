@@ -80,20 +80,21 @@ canvas {
     background: rgba(255, 0, 64, 0.03);
 }
 
-/* MOBILE CONTROL BUTTONS */
+/* MOBILE CONTROL BUTTONS
+   No longer absolutely positioned over the canvas - it now lives outside
+   #gameWrapper (see index.html) and only appears on mobile via the media
+   query below, laid out as a normal centered flex row under the control bar. */
 #mobile-controls {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
     display: none;
+    justify-content: center;
     gap: 15px;
-    z-index: 10;
     background: rgba(0, 0, 0, 0.8);
     padding: 12px 20px;
     border-radius: 50px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    width: fit-content;
+    margin: 12px auto 0;
 }
 
 .mobile-btn {
@@ -132,6 +133,9 @@ canvas {
     z-index: 20;
     padding: 30px;
     backdrop-filter: blur(5px);
+    /* Safety net: if content is ever taller than the overlay, allow it to
+       scroll instead of being clipped by #gameWrapper's overflow:hidden */
+    overflow-y: auto;
 }
 
 .overlay h1 {
@@ -377,7 +381,6 @@ canvas {
 
     #mobile-controls {
         display: flex !important;
-        bottom: 15px;
         padding: 10px 16px;
         gap: 12px;
     }
@@ -386,6 +389,28 @@ canvas {
         width: 40px;
         height: 40px;
         font-size: 18px;
+    }
+
+    /* Hide keyboard-only (WASD) instructions - not relevant on touch devices */
+    .desktop-only {
+        display: none;
+    }
+
+    /* The settings menu was clipped because #gameWrapper's height is driven by
+       the canvas aspect ratio and can be quite short on phones, while
+       #gameWrapper also has overflow:hidden. Making the settings overlay
+       "fixed" takes it out of that box entirely so it covers the full
+       viewport and the CLOSE button (and everything else) is always visible. */
+    #settings-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        z-index: 100;
+        padding: 20px 20px 40px;
+        overflow-y: auto;
     }
 
     .overlay h1 {
@@ -453,7 +478,6 @@ canvas {
     #mobile-controls {
         padding: 8px 14px;
         gap: 10px;
-        bottom: 10px;
     }
 
     .mobile-btn {

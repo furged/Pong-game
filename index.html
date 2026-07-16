@@ -16,14 +16,7 @@
                 <!-- MOBILE TOUCH ZONES - INSIDE THE GAME AREA BUT ON THE SIDES -->
                 <div id="touch-left" class="touch-zone"></div>
                 <div id="touch-right" class="touch-zone"></div>
-                
-                <!-- MOBILE CONTROLS -->
-                <div id="mobile-controls">
-                    <button class="mobile-btn" id="mobilePause">⏸</button>
-                    <button class="mobile-btn" id="mobileRestart">↻</button>
-                    <button class="mobile-btn" id="mobileMenu">☰</button>
-                </div>
-                
+
                 <!-- MENU OVERLAY -->
                 <div id="menu-overlay" class="overlay">
                     <h1>PONG</h1>
@@ -73,6 +66,14 @@
                 <span id="win-target" class="mono-text">Target: 5</span>
                 <span id="frame-count" class="mono-text">Frames: 0</span>
             </div>
+
+            <!-- MOBILE CONTROLS: moved outside #gameWrapper so the buttons sit
+                 below the play area instead of floating on top of the canvas -->
+            <div id="mobile-controls">
+                <button class="mobile-btn" id="mobilePause">⏸</button>
+                <button class="mobile-btn" id="mobileRestart">↻</button>
+                <button class="mobile-btn" id="mobileMenu">☰</button>
+            </div>
         </div>
 
         <div class="dashboard-wrapper">
@@ -91,7 +92,8 @@
             <div class="viz-wrapper">
                 <h4>CONTROLS</h4>
                 <div class="controls-box">
-                    <div><strong>Desktop:</strong> P1: W/S | P2: ↑/↓</div>
+                    <!-- "desktop-only" is hidden on mobile via a media query in style.css -->
+                    <div class="desktop-only"><strong>Desktop:</strong> P1: W/S | P2: ↑/↓</div>
                     <div><strong>Mobile:</strong> Touch left/right edges</div>
                     <div><strong>Game:</strong> P (pause) / R (restart) / M (menu)</div>
                 </div>
