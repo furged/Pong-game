@@ -15,7 +15,8 @@ let settings = {
 
 // Game state
 let scoreA = 0, scoreB = 0;
-const WIN_SCORE = 5;
+let WIN_SCORE = 5; // Default, can be changed in settings
+let INFINITE_MODE = false;
 let gameActive = false;
 let gamePaused = false;
 let isAI = false;
@@ -35,7 +36,7 @@ let ballY = 300;
 const BALL_RADIUS = 10;
 let ballDX = 6;
 let ballDY = 6;
-let baseSpeed = 5;  // Reduced from 6
+let baseSpeed = 5;
 let maxSpeed = 16;
 
 // Input
@@ -49,25 +50,23 @@ let gamesPlayed = 0;
 let currentRally = 0;
 let longestRally = 0;
 let totalRallies = 0;
+let frameCount = 0;
 
 function resetBallSpeed() {
-    // FIX 3: Prevent horizontal-only trajectory
     let angle;
     let attempts = 0;
     do {
-        angle = (Math.random() * 1.2) - 0.6; // -0.6 to 0.6 radians (~ -34° to 34°)
+        angle = (Math.random() * 1.2) - 0.6;
         attempts++;
     } while ((Math.abs(angle) < 0.2 || Math.abs(angle) > 0.5) && attempts < 20);
-    // If we can't find a good angle, force one
     if (Math.abs(angle) < 0.2) angle = 0.3;
     if (Math.abs(angle) > 0.5) angle = 0.4;
     
-    let speed = baseSpeed; // Start slow
+    let speed = baseSpeed;
     let direction = Math.random() > 0.5 ? 1 : -1;
     ballDX = speed * Math.cos(angle) * direction;
     ballDY = speed * Math.sin(angle);
     
-    // Ensure vertical movement exists
     if (Math.abs(ballDY) < 1.2) {
         ballDY = (ballDY > 0 ? 1 : -1) * 1.5;
     }
@@ -84,18 +83,27 @@ function resetGame() {
     gameActive = true;
     gamePaused = false;
     currentRally = 0;
+    frameCount = 0;
     updateScoreDisplay();
     document.getElementById('game-status').innerText = '● PLAYING';
     document.getElementById('game-status').style.color = '#00ff00';
+    document.getElementById('frame-count').innerText = `Frames: 0`;
 }
 
 function startGame(mode) {
+    // Get win score from settings
+    const select = document.getElementById('winScoreSelect');
+    WIN_SCORE = parseInt(select.value);
+    INFINITE_MODE = (WIN_SCORE === 0);
+    
+    // Update display
+    document.getElementById('win-target').innerText = INFINITE_MODE ? 'Target: ∞' : `Target: ${WIN_SCORE}`;
+    
     menu.style.display = 'none';
     settingsMenu.style.display = 'none';
     isAI = (mode === 'single');
     document.getElementById('game-mode').innerText = isAI ? 'VS BOT' : '2 PLAYER';
     
-    // FIX 1: Player on right (P2) with arrow controls for VS Bot mode
     if (isAI) {
         document.getElementById('controls-info').innerHTML = 'YOU: ↑/↓ | BOT: Left';
     } else {
@@ -117,6 +125,14 @@ function updateScoreDisplay() {
     document.getElementById('score-display').innerText = `P1: ${scoreA} | P2: ${scoreB}`;
 }
 
+function checkWinCondition() {
+    if (INFINITE_MODE) {
+        // Never end in infinite mode - just keep playing
+        return false;
+    }
+    return (scoreA >= WIN_SCORE || scoreB >= WIN_SCORE);
+}
+
 function handleGameEnd() {
     gamesPlayed++;
     document.getElementById('games-played').innerText = gamesPlayed;
@@ -129,6 +145,7 @@ function handleGameEnd() {
     totalRallies += currentRally;
     currentRally = 0;
     
+    gameActive = false;
     document.getElementById('game-status').innerText = `● GAME OVER`;
     document.getElementById('game-status').style.color = '#ff0040';
 }
@@ -136,9 +153,10 @@ function handleGameEnd() {
 function update() {
     if (!gameActive || gamePaused) return;
     
-    // FIX 1: In VS Bot mode, P1 (left) is the bot, P2 (right) is the player
+    frameCount++;
+    document.getElementById('frame-count').innerText = `Frames: ${frameCount}`;
+    
     if (isAI) {
-        // Left paddle = BOT (simple AI)
         let targetY = ballY + (Math.random() - 0.5) * 40;
         let diffY = targetY - (300 + paddleAY);
         let aiSpeed = Math.min(5, Math.abs(diffY) * 0.1 + 1.5);
@@ -149,23 +167,19 @@ function update() {
             paddleAY = Math.max(-250, paddleAY - aiSpeed);
         }
         
-        // Right paddle = PLAYER (arrow keys)
         if (upPressed) paddleBY = Math.max(-250, paddleBY - PLAYER_SPEED);
         if (downPressed) paddleBY = Math.min(250, paddleBY + PLAYER_SPEED);
         
     } else {
-        // Multiplayer mode
         if (wPressed) paddleAY = Math.max(-250, paddleAY - PLAYER_SPEED);
         if (sPressed) paddleAY = Math.min(250, paddleAY + PLAYER_SPEED);
         if (upPressed) paddleBY = Math.max(-250, paddleBY - PLAYER_SPEED);
         if (downPressed) paddleBY = Math.min(250, paddleBY + PLAYER_SPEED);
     }
     
-    // Move ball
     ballX += ballDX;
     ballY += ballDY;
     
-    // Wall collisions (top/bottom)
     if (ballY + BALL_RADIUS > 590) {
         ballY = 590 - BALL_RADIUS;
         ballDY *= -1;
@@ -175,7 +189,6 @@ function update() {
         ballDY *= -1;
     }
     
-    // Paddle A collision (left)
     let paddleA_abs_y = 300 + paddleAY;
     if (ballX - BALL_RADIUS < PADDLE_A_X + PADDLE_W/2 && 
         ballX + BALL_RADIUS > PADDLE_A_X - PADDLE_W/2 &&
@@ -187,7 +200,6 @@ function update() {
         currentRally++;
     }
     
-    // Paddle B collision (right)
     let paddleB_abs_y = 300 + paddleBY;
     if (ballX + BALL_RADIUS > PADDLE_B_X - PADDLE_W/2 && 
         ballX - BALL_RADIUS < PADDLE_B_X + PADDLE_W/2 &&
@@ -199,22 +211,19 @@ function update() {
         currentRally++;
     }
     
-    // Scoring
     if (ballX > 790) {
         scoreA++;
         updateScoreDisplay();
-        resetRound(); // FIX 2: Reset with slow speed
-        if (scoreA >= WIN_SCORE) {
-            gameActive = false;
+        resetRound();
+        if (checkWinCondition()) {
             handleGameEnd();
         }
     }
     if (ballX < 10) {
         scoreB++;
         updateScoreDisplay();
-        resetRound(); // FIX 2: Reset with slow speed
-        if (scoreB >= WIN_SCORE) {
-            gameActive = false;
+        resetRound();
+        if (checkWinCondition()) {
             handleGameEnd();
         }
     }
@@ -234,32 +243,26 @@ function resetRound() {
     ballX = 400;
     ballY = 300;
     
-    // FIX 2: Reset to slow speed (baseSpeed) when a point is scored
     let angle = Math.atan2(ballDY, ballDX);
     let direction = ballDX > 0 ? -1 : 1;
-    let speed = baseSpeed; // Start slow again
+    let speed = baseSpeed;
     
-    // Randomize angle a bit
     angle += (Math.random() - 0.5) * 0.4;
     
-    // Ensure it's not too flat
     if (Math.abs(angle) < 0.15) angle = (angle > 0 ? 1 : -1) * 0.25;
     
     ballDX = Math.cos(angle) * speed * direction;
     ballDY = Math.sin(angle) * speed;
     
-    // Ensure vertical movement
     if (Math.abs(ballDY) < 1.2) {
         ballDY = (ballDY > 0 ? 1 : -1) * 1.5;
     }
 }
 
 function draw() {
-    // Background
     ctx.fillStyle = settings.colorBg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Center line
     ctx.strokeStyle = 'rgba(255,255,255,0.2)';
     ctx.setLineDash([10, 15]);
     ctx.beginPath();
@@ -268,26 +271,22 @@ function draw() {
     ctx.stroke();
     ctx.setLineDash([]);
     
-    // Center circle
     ctx.beginPath();
     ctx.arc(400, 300, 60, 0, Math.PI * 2);
     ctx.strokeStyle = 'rgba(255,255,255,0.1)';
     ctx.stroke();
     
-    // Paddle A
     ctx.fillStyle = settings.colorA;
     ctx.shadowColor = settings.colorA;
     ctx.shadowBlur = 15;
     ctx.fillRect(PADDLE_A_X - PADDLE_W/2, 300 + paddleAY - PADDLE_H/2, PADDLE_W, PADDLE_H);
     
-    // Paddle B
     ctx.fillStyle = settings.colorB;
     ctx.shadowColor = settings.colorB;
     ctx.shadowBlur = 15;
     ctx.fillRect(PADDLE_B_X - PADDLE_W/2, 300 + paddleBY - PADDLE_H/2, PADDLE_W, PADDLE_H);
     ctx.shadowBlur = 0;
     
-    // Ball
     ctx.beginPath();
     ctx.arc(ballX, ballY, BALL_RADIUS, 0, Math.PI * 2);
     ctx.fillStyle = settings.colorBall;
@@ -297,15 +296,13 @@ function draw() {
     ctx.closePath();
     ctx.shadowBlur = 0;
     
-    // Score
     ctx.fillStyle = 'rgba(255,255,255,0.8)';
     ctx.font = '48px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
     
-    // FIX 1: In VS Bot mode, show BOT on left, YOU on right
     if (isAI) {
-        ctx.fillText(scoreA, 180, 80); // Bot score (left)
-        ctx.fillText(scoreB, 620, 80); // Player score (right)
+        ctx.fillText(scoreA, 180, 80);
+        ctx.fillText(scoreB, 620, 80);
         
         ctx.font = '12px "JetBrains Mono", monospace';
         ctx.fillStyle = 'rgba(255,255,255,0.3)';
@@ -321,14 +318,17 @@ function draw() {
         ctx.fillText('P2', 620, 110);
     }
     
-    // Rally count
+    // Show target score in center
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.font = '14px "JetBrains Mono", monospace';
+    ctx.fillText(INFINITE_MODE ? '∞' : `TO ${WIN_SCORE}`, 400, 560);
+    
     if (currentRally > 5) {
         ctx.fillStyle = 'rgba(255,255,255,0.2)';
         ctx.font = '14px "JetBrains Mono", monospace';
         ctx.fillText(`RALLY: ${currentRally}`, 400, 570);
     }
     
-    // Pause overlay
     if (gamePaused) {
         ctx.fillStyle = 'rgba(0,0,0,0.7)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -341,7 +341,6 @@ function draw() {
         ctx.fillText('Press P to resume', 400, 350);
     }
     
-    // Game over overlay
     if (!gameActive && !gamePaused && menu.style.display === 'none') {
         ctx.fillStyle = 'rgba(0,0,0,0.75)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -367,7 +366,6 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-// Toggle functions
 function togglePause() {
     if (gameActive) gamePaused = !gamePaused;
 }
@@ -387,6 +385,13 @@ function toggleSettings() {
         document.getElementById('colorPaddleB').value = settings.colorB;
         document.getElementById('colorBall').value = settings.colorBall;
         document.getElementById('colorBg').value = settings.colorBg;
+        // Set the select to current value
+        const select = document.getElementById('winScoreSelect');
+        if (INFINITE_MODE) {
+            select.value = '0';
+        } else {
+            select.value = WIN_SCORE.toString();
+        }
     } else {
         settingsMenu.style.display = 'none';
         menu.style.display = 'flex';
@@ -397,13 +402,12 @@ function toggleSettings() {
     }
 }
 
-// Keyboard events
 document.addEventListener('keydown', (e) => {
     if (e.key === 'w' || e.key === 'W') {
-        if (!isAI) wPressed = true; // Only in multiplayer
+        if (!isAI) wPressed = true;
     }
     if (e.key === 's' || e.key === 'S') {
-        if (!isAI) sPressed = true; // Only in multiplayer
+        if (!isAI) sPressed = true;
     }
     if (e.key === 'ArrowUp') {
         upPressed = true;
@@ -431,5 +435,4 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
-// Start
 gameLoop();

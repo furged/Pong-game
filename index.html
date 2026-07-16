@@ -24,6 +24,18 @@
                 <div id="settings-overlay" class="overlay" style="display:none;">
                     <h2>⚙️ Settings</h2>
                     <div class="setting-group">
+                        <label>Points to Win</label>
+                        <select id="winScoreSelect">
+                            <option value="3">3</option>
+                            <option value="5" selected>5</option>
+                            <option value="7">7</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="21">21</option>
+                            <option value="0">∞ Infinite</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
                         <label>Paddle 1 Color</label>
                         <input type="color" id="colorPaddleA" value="#00f3ff">
                     </div>
@@ -45,6 +57,7 @@
             
             <div class="control-bar">
                 <span id="score-display" class="mono-text">P1: 0 | P2: 0</span>
+                <span id="win-target" class="mono-text">Target: 5</span>
                 <span id="frame-count" class="mono-text">Frames: 0</span>
             </div>
         </div>

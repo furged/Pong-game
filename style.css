@@ -260,3 +260,26 @@ canvas {
     color: #00f3ff;
     font-weight: 700;
 }
+
+/* Add to existing style.css */
+.setting-group select {
+    background: #1a1a2e;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100px;
+}
+
+.setting-group select:focus {
+    outline: none;
+    border-color: #00f3ff;
+}
+
+.setting-group select option {
+    background: #1a1a2e;
+    color: #fff;
+}
