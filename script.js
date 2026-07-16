@@ -35,7 +35,7 @@ let ballY = 300;
 const BALL_RADIUS = 10;
 let ballDX = 6;
 let ballDY = 6;
-let baseSpeed = 6;
+let baseSpeed = 5;  // Reduced from 6
 let maxSpeed = 16;
 
 // Input
@@ -51,15 +51,24 @@ let longestRally = 0;
 let totalRallies = 0;
 
 function resetBallSpeed() {
-    let angle = (Math.random() * 1.2) - 0.6;
-    while (Math.abs(angle) < 0.15) {
-        angle = (Math.random() * 1.2) - 0.6;
-    }
-    let speed = baseSpeed;
+    // FIX 3: Prevent horizontal-only trajectory
+    let angle;
+    let attempts = 0;
+    do {
+        angle = (Math.random() * 1.2) - 0.6; // -0.6 to 0.6 radians (~ -34° to 34°)
+        attempts++;
+    } while ((Math.abs(angle) < 0.2 || Math.abs(angle) > 0.5) && attempts < 20);
+    // If we can't find a good angle, force one
+    if (Math.abs(angle) < 0.2) angle = 0.3;
+    if (Math.abs(angle) > 0.5) angle = 0.4;
+    
+    let speed = baseSpeed; // Start slow
     let direction = Math.random() > 0.5 ? 1 : -1;
     ballDX = speed * Math.cos(angle) * direction;
     ballDY = speed * Math.sin(angle);
-    if (Math.abs(ballDY) < 1.5) {
+    
+    // Ensure vertical movement exists
+    if (Math.abs(ballDY) < 1.2) {
         ballDY = (ballDY > 0 ? 1 : -1) * 1.5;
     }
 }
@@ -85,7 +94,14 @@ function startGame(mode) {
     settingsMenu.style.display = 'none';
     isAI = (mode === 'single');
     document.getElementById('game-mode').innerText = isAI ? 'VS BOT' : '2 PLAYER';
-    document.getElementById('controls-info').innerText = isAI ? 'P1: W/S | BOT' : 'P1: W/S | P2: ↑/↓';
+    
+    // FIX 1: Player on right (P2) with arrow controls for VS Bot mode
+    if (isAI) {
+        document.getElementById('controls-info').innerHTML = 'YOU: ↑/↓ | BOT: Left';
+    } else {
+        document.getElementById('controls-info').innerHTML = 'P1: W/S | P2: ↑/↓';
+    }
+    
     resetGame();
     document.getElementById('game-status').innerText = '● PLAYING';
 }
@@ -120,24 +136,27 @@ function handleGameEnd() {
 function update() {
     if (!gameActive || gamePaused) return;
     
-    // P1 Controls (W/S)
-    if (wPressed) paddleAY = Math.max(-250, paddleAY - PLAYER_SPEED);
-    if (sPressed) paddleAY = Math.min(250, paddleAY + PLAYER_SPEED);
-    
-    // P2 / Bot Controls
+    // FIX 1: In VS Bot mode, P1 (left) is the bot, P2 (right) is the player
     if (isAI) {
-        // Simple AI that follows the ball with slight imperfection
-        let targetY = ballY + (Math.random() - 0.5) * 30;
-        let diffY = targetY - (300 + paddleBY);
-        let aiSpeed = Math.min(6, Math.abs(diffY) * 0.12 + 2);
+        // Left paddle = BOT (simple AI)
+        let targetY = ballY + (Math.random() - 0.5) * 40;
+        let diffY = targetY - (300 + paddleAY);
+        let aiSpeed = Math.min(5, Math.abs(diffY) * 0.1 + 1.5);
         
         if (diffY > 8) {
-            paddleBY = Math.min(250, paddleBY + aiSpeed);
+            paddleAY = Math.min(250, paddleAY + aiSpeed);
         } else if (diffY < -8) {
-            paddleBY = Math.max(-250, paddleBY - aiSpeed);
+            paddleAY = Math.max(-250, paddleAY - aiSpeed);
         }
+        
+        // Right paddle = PLAYER (arrow keys)
+        if (upPressed) paddleBY = Math.max(-250, paddleBY - PLAYER_SPEED);
+        if (downPressed) paddleBY = Math.min(250, paddleBY + PLAYER_SPEED);
+        
     } else {
-        // P2 Controls (Arrow keys)
+        // Multiplayer mode
+        if (wPressed) paddleAY = Math.max(-250, paddleAY - PLAYER_SPEED);
+        if (sPressed) paddleAY = Math.min(250, paddleAY + PLAYER_SPEED);
         if (upPressed) paddleBY = Math.max(-250, paddleBY - PLAYER_SPEED);
         if (downPressed) paddleBY = Math.min(250, paddleBY + PLAYER_SPEED);
     }
@@ -184,7 +203,7 @@ function update() {
     if (ballX > 790) {
         scoreA++;
         updateScoreDisplay();
-        resetRound();
+        resetRound(); // FIX 2: Reset with slow speed
         if (scoreA >= WIN_SCORE) {
             gameActive = false;
             handleGameEnd();
@@ -193,7 +212,7 @@ function update() {
     if (ballX < 10) {
         scoreB++;
         updateScoreDisplay();
-        resetRound();
+        resetRound(); // FIX 2: Reset with slow speed
         if (scoreB >= WIN_SCORE) {
             gameActive = false;
             handleGameEnd();
@@ -214,11 +233,25 @@ function increaseSpeed() {
 function resetRound() {
     ballX = 400;
     ballY = 300;
-    let mag = Math.sqrt(ballDX*ballDX + ballDY*ballDY);
+    
+    // FIX 2: Reset to slow speed (baseSpeed) when a point is scored
     let angle = Math.atan2(ballDY, ballDX);
     let direction = ballDX > 0 ? -1 : 1;
-    ballDX = Math.cos(angle) * mag * direction;
-    ballDY = Math.sin(angle) * mag;
+    let speed = baseSpeed; // Start slow again
+    
+    // Randomize angle a bit
+    angle += (Math.random() - 0.5) * 0.4;
+    
+    // Ensure it's not too flat
+    if (Math.abs(angle) < 0.15) angle = (angle > 0 ? 1 : -1) * 0.25;
+    
+    ballDX = Math.cos(angle) * speed * direction;
+    ballDY = Math.sin(angle) * speed;
+    
+    // Ensure vertical movement
+    if (Math.abs(ballDY) < 1.2) {
+        ballDY = (ballDY > 0 ? 1 : -1) * 1.5;
+    }
 }
 
 function draw() {
@@ -268,14 +301,25 @@ function draw() {
     ctx.fillStyle = 'rgba(255,255,255,0.8)';
     ctx.font = '48px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(scoreA, 180, 80);
-    ctx.fillText(scoreB, 620, 80);
     
-    // Labels
-    ctx.font = '12px "JetBrains Mono", monospace';
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.fillText(isAI ? 'BOT' : 'P1', 180, 110);
-    ctx.fillText(isAI ? 'YOU' : 'P2', 620, 110);
+    // FIX 1: In VS Bot mode, show BOT on left, YOU on right
+    if (isAI) {
+        ctx.fillText(scoreA, 180, 80); // Bot score (left)
+        ctx.fillText(scoreB, 620, 80); // Player score (right)
+        
+        ctx.font = '12px "JetBrains Mono", monospace';
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.fillText('BOT', 180, 110);
+        ctx.fillText('YOU', 620, 110);
+    } else {
+        ctx.fillText(scoreA, 180, 80);
+        ctx.fillText(scoreB, 620, 80);
+        
+        ctx.font = '12px "JetBrains Mono", monospace';
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.fillText('P1', 180, 110);
+        ctx.fillText('P2', 620, 110);
+    }
     
     // Rally count
     if (currentRally > 5) {
@@ -304,7 +348,12 @@ function draw() {
         ctx.fillStyle = '#00f3ff';
         ctx.font = '48px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
-        let winner = scoreA >= WIN_SCORE ? 'P1 WINS!' : 'P2 WINS!';
+        let winner;
+        if (isAI) {
+            winner = scoreA >= WIN_SCORE ? 'BOT WINS!' : 'YOU WIN! 🎉';
+        } else {
+            winner = scoreA >= WIN_SCORE ? 'P1 WINS!' : 'P2 WINS!';
+        }
         ctx.fillText(winner, 400, 280);
         ctx.fillStyle = 'rgba(255,255,255,0.4)';
         ctx.font = '16px "JetBrains Mono", monospace';
@@ -350,8 +399,12 @@ function toggleSettings() {
 
 // Keyboard events
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'w' || e.key === 'W') wPressed = true;
-    if (e.key === 's' || e.key === 'S') sPressed = true;
+    if (e.key === 'w' || e.key === 'W') {
+        if (!isAI) wPressed = true; // Only in multiplayer
+    }
+    if (e.key === 's' || e.key === 'S') {
+        if (!isAI) sPressed = true; // Only in multiplayer
+    }
     if (e.key === 'ArrowUp') {
         upPressed = true;
         e.preventDefault();
