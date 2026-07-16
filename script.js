@@ -15,7 +15,7 @@ let settings = {
 
 // Game state
 let scoreA = 0, scoreB = 0;
-let WIN_SCORE = 5; // Default, can be changed in settings
+let WIN_SCORE = 5;
 let INFINITE_MODE = false;
 let gameActive = false;
 let gamePaused = false;
@@ -44,6 +44,12 @@ let wPressed = false;
 let sPressed = false;
 let upPressed = false;
 let downPressed = false;
+
+// Touch input
+let touchLeftY = null;
+let touchRightY = null;
+let isTouchingLeft = false;
+let isTouchingRight = false;
 
 // Stats
 let gamesPlayed = 0;
@@ -91,12 +97,10 @@ function resetGame() {
 }
 
 function startGame(mode) {
-    // Get win score from settings
     const select = document.getElementById('winScoreSelect');
     WIN_SCORE = parseInt(select.value);
     INFINITE_MODE = (WIN_SCORE === 0);
     
-    // Update display
     document.getElementById('win-target').innerText = INFINITE_MODE ? 'Target: ∞' : `Target: ${WIN_SCORE}`;
     
     menu.style.display = 'none';
@@ -127,7 +131,6 @@ function updateScoreDisplay() {
 
 function checkWinCondition() {
     if (INFINITE_MODE) {
-        // Never end in infinite mode - just keep playing
         return false;
     }
     return (scoreA >= WIN_SCORE || scoreB >= WIN_SCORE);
@@ -156,7 +159,28 @@ function update() {
     frameCount++;
     document.getElementById('frame-count').innerText = `Frames: ${frameCount}`;
     
+    // Touch controls - map touch position to paddle movement
+    if (isTouchingLeft && touchLeftY !== null) {
+        const rect = canvas.getBoundingClientRect();
+        const canvasHeight = canvas.height;
+        const touchY = (touchLeftY - rect.top) / rect.height * canvasHeight;
+        const targetPaddleY = touchY - 300;
+        paddleAY += (targetPaddleY - paddleAY) * 0.15;
+        paddleAY = Math.max(-250, Math.min(250, paddleAY));
+    }
+    
+    if (isTouchingRight && touchRightY !== null) {
+        const rect = canvas.getBoundingClientRect();
+        const canvasHeight = canvas.height;
+        const touchY = (touchRightY - rect.top) / rect.height * canvasHeight;
+        const targetPaddleY = touchY - 300;
+        paddleBY += (targetPaddleY - paddleBY) * 0.15;
+        paddleBY = Math.max(-250, Math.min(250, paddleBY));
+    }
+    
+    // Keyboard controls
     if (isAI) {
+        // Bot AI for left paddle
         let targetY = ballY + (Math.random() - 0.5) * 40;
         let diffY = targetY - (300 + paddleAY);
         let aiSpeed = Math.min(5, Math.abs(diffY) * 0.1 + 1.5);
@@ -167,19 +191,25 @@ function update() {
             paddleAY = Math.max(-250, paddleAY - aiSpeed);
         }
         
+        // Right paddle controlled by keyboard OR touch
         if (upPressed) paddleBY = Math.max(-250, paddleBY - PLAYER_SPEED);
         if (downPressed) paddleBY = Math.min(250, paddleBY + PLAYER_SPEED);
         
     } else {
+        // Multiplayer - left paddle
         if (wPressed) paddleAY = Math.max(-250, paddleAY - PLAYER_SPEED);
         if (sPressed) paddleAY = Math.min(250, paddleAY + PLAYER_SPEED);
+        
+        // Right paddle
         if (upPressed) paddleBY = Math.max(-250, paddleBY - PLAYER_SPEED);
         if (downPressed) paddleBY = Math.min(250, paddleBY + PLAYER_SPEED);
     }
     
+    // Ball movement
     ballX += ballDX;
     ballY += ballDY;
     
+    // Wall collisions
     if (ballY + BALL_RADIUS > 590) {
         ballY = 590 - BALL_RADIUS;
         ballDY *= -1;
@@ -189,6 +219,7 @@ function update() {
         ballDY *= -1;
     }
     
+    // Paddle collisions
     let paddleA_abs_y = 300 + paddleAY;
     if (ballX - BALL_RADIUS < PADDLE_A_X + PADDLE_W/2 && 
         ballX + BALL_RADIUS > PADDLE_A_X - PADDLE_W/2 &&
@@ -211,6 +242,7 @@ function update() {
         currentRally++;
     }
     
+    // Scoring
     if (ballX > 790) {
         scoreA++;
         updateScoreDisplay();
@@ -318,7 +350,6 @@ function draw() {
         ctx.fillText('P2', 620, 110);
     }
     
-    // Show target score in center
     ctx.fillStyle = 'rgba(255,255,255,0.1)';
     ctx.font = '14px "JetBrains Mono", monospace';
     ctx.fillText(INFINITE_MODE ? '∞' : `TO ${WIN_SCORE}`, 400, 560);
@@ -385,7 +416,6 @@ function toggleSettings() {
         document.getElementById('colorPaddleB').value = settings.colorB;
         document.getElementById('colorBall').value = settings.colorBall;
         document.getElementById('colorBg').value = settings.colorBg;
-        // Set the select to current value
         const select = document.getElementById('winScoreSelect');
         if (INFINITE_MODE) {
             select.value = '0';
@@ -402,6 +432,71 @@ function toggleSettings() {
     }
 }
 
+// --- TOUCH EVENTS ---
+const touchLeft = document.getElementById('touch-left');
+const touchRight = document.getElementById('touch-right');
+
+function handleTouchStart(e, side) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    
+    if (side === 'left') {
+        isTouchingLeft = true;
+        touchLeftY = touch.clientY;
+    } else {
+        isTouchingRight = true;
+        touchRightY = touch.clientY;
+    }
+}
+
+function handleTouchMove(e, side) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    
+    if (side === 'left') {
+        touchLeftY = touch.clientY;
+    } else {
+        touchRightY = touch.clientY;
+    }
+}
+
+function handleTouchEnd(e, side) {
+    e.preventDefault();
+    if (side === 'left') {
+        isTouchingLeft = false;
+        touchLeftY = null;
+    } else {
+        isTouchingRight = false;
+        touchRightY = null;
+    }
+}
+
+// Left touch zone events
+touchLeft.addEventListener('touchstart', (e) => handleTouchStart(e, 'left'));
+touchLeft.addEventListener('touchmove', (e) => handleTouchMove(e, 'left'));
+touchLeft.addEventListener('touchend', (e) => handleTouchEnd(e, 'left'));
+touchLeft.addEventListener('touchcancel', (e) => handleTouchEnd(e, 'left'));
+
+// Right touch zone events
+touchRight.addEventListener('touchstart', (e) => handleTouchStart(e, 'right'));
+touchRight.addEventListener('touchmove', (e) => handleTouchMove(e, 'right'));
+touchRight.addEventListener('touchend', (e) => handleTouchEnd(e, 'right'));
+touchRight.addEventListener('touchcancel', (e) => handleTouchEnd(e, 'right'));
+
+// Mobile buttons
+document.getElementById('mobilePause').addEventListener('click', togglePause);
+document.getElementById('mobileRestart').addEventListener('click', restartGame);
+document.getElementById('mobileMenu').addEventListener('click', goToMainMenu);
+
+// Also support touch on buttons
+document.querySelectorAll('.mobile-btn').forEach(btn => {
+    btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        btn.click();
+    });
+});
+
+// Keyboard events
 document.addEventListener('keydown', (e) => {
     if (e.key === 'w' || e.key === 'W') {
         if (!isAI) wPressed = true;

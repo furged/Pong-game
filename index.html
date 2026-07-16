@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PONG</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -12,6 +12,23 @@
         <div class="arena-wrapper">
             <div id="gameWrapper">
                 <canvas id="gameCanvas" width="800" height="600"></canvas>
+                
+                <!-- Mobile touch controls - OUTSIDE the canvas -->
+                <div id="touch-left" class="touch-zone">
+                    <div class="touch-label">▲</div>
+                    <div class="touch-label">▼</div>
+                </div>
+                <div id="touch-right" class="touch-zone">
+                    <div class="touch-label">▲</div>
+                    <div class="touch-label">▼</div>
+                </div>
+                
+                <!-- Mobile controls overlay -->
+                <div id="mobile-controls">
+                    <button class="mobile-btn" id="mobilePause">⏸</button>
+                    <button class="mobile-btn" id="mobileRestart">↻</button>
+                    <button class="mobile-btn" id="mobileMenu">☰</button>
+                </div>
                 
                 <div id="menu-overlay" class="overlay">
                     <h1>PONG</h1>
@@ -78,8 +95,8 @@
             <div class="viz-wrapper">
                 <h4>CONTROLS</h4>
                 <div class="controls-box">
-                    <div><strong>P1 (Left):</strong> W (up) / S (down)</div>
-                    <div><strong>P2 (Right):</strong> ↑ (up) / ↓ (down)</div>
+                    <div><strong>Desktop:</strong> P1: W/S | P2: ↑/↓</div>
+                    <div><strong>Mobile:</strong> Touch left/right edges of screen</div>
                     <div><strong>Game:</strong> P (pause) / R (restart) / M (menu)</div>
                 </div>
             </div>

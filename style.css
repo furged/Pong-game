@@ -10,6 +10,9 @@ body {
     overflow: hidden;
     height: 100vh;
     color: #e0e0e0;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .app-container { 
@@ -44,6 +47,8 @@ body {
     border: 1px solid #333; 
     border-radius: 8px; 
     box-shadow: 0 0 30px rgba(0, 150, 255, 0.1); 
+    width: 100%;
+    max-width: 800px;
 }
 
 canvas { 
@@ -51,7 +56,83 @@ canvas {
     background: #000; 
     width: 100%; 
     height: auto; 
-    max-height: 80vh; 
+    max-height: 80vh;
+    touch-action: none;
+}
+
+/* Touch zones - positioned OUTSIDE the canvas on the sides */
+.touch-zone {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 60px;
+    z-index: 5;
+    touch-action: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    opacity: 0.3;
+    transition: opacity 0.3s;
+}
+
+.touch-zone:active {
+    opacity: 0.6;
+}
+
+.touch-label {
+    color: #00f3ff;
+    font-size: 24px;
+    pointer-events: none;
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+#touch-left {
+    left: -60px;
+    border-right: 2px solid rgba(0, 243, 255, 0.2);
+}
+
+#touch-right {
+    right: -60px;
+    border-left: 2px solid rgba(255, 0, 64, 0.2);
+}
+
+/* Mobile controls buttons */
+#mobile-controls {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    gap: 15px;
+    z-index: 10;
+    background: rgba(0,0,0,0.6);
+    padding: 10px 20px;
+    border-radius: 30px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.mobile-btn {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    touch-action: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-btn:active {
+    transform: scale(0.9);
+    background: rgba(255,255,255,0.2);
 }
 
 /* Menus */
@@ -68,6 +149,7 @@ canvas {
     align-items: center; 
     border-radius: 8px; 
     backdrop-filter: blur(5px); 
+    z-index: 20;
 }
 
 .overlay h1 { 
@@ -101,6 +183,7 @@ canvas {
     width: 220px; 
     font-family: inherit; 
     letter-spacing: 1px;
+    touch-action: manipulation;
 }
 
 .menu-btn:hover { 
@@ -108,6 +191,10 @@ canvas {
     border-color: #00f3ff; 
     box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); 
     transform: scale(1.02); 
+}
+
+.menu-btn:active {
+    transform: scale(0.95);
 }
 
 .settings-btn { 
@@ -150,6 +237,28 @@ canvas {
     border-radius: 4px;
     background: transparent;
     cursor: pointer;
+}
+
+.setting-group select {
+    background: #1a1a2e;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100px;
+}
+
+.setting-group select:focus {
+    outline: none;
+    border-color: #00f3ff;
+}
+
+.setting-group select option {
+    background: #1a1a2e;
+    color: #fff;
 }
 
 /* Dashboard */
@@ -238,7 +347,7 @@ canvas {
     color: #00f3ff;
 }
 
-/* Controls */
+/* Control bar */
 .control-bar { 
     width: 100%; 
     max-width: 800px; 
@@ -247,6 +356,8 @@ canvas {
     align-items: center; 
     margin-top: 15px; 
     padding: 0 10px; 
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .mono-text { 
@@ -261,25 +372,171 @@ canvas {
     font-weight: 700;
 }
 
-/* Add to existing style.css */
-.setting-group select {
-    background: #1a1a2e;
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 8px 15px;
-    border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    cursor: pointer;
-    width: 100px;
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    
+    .arena-wrapper {
+        flex: 1;
+        padding: 10px;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+    }
+    
+    .dashboard-wrapper {
+        flex: 0 0 auto;
+        max-height: 40vh;
+        padding: 15px;
+    }
+    
+    .touch-zone {
+        width: 40px;
+    }
+    
+    #touch-left {
+        left: -40px;
+    }
+    
+    #touch-right {
+        right: -40px;
+    }
+    
+    .touch-label {
+        font-size: 18px;
+    }
+    
+    .dashboard-header h3 {
+        font-size: 12px;
+    }
+    
+    .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    .metric-card {
+        padding: 10px;
+    }
+    
+    .metric-card span {
+        font-size: 16px;
+    }
+    
+    .metric-card label {
+        font-size: 9px;
+    }
+    
+    .control-bar {
+        font-size: 12px;
+        padding: 0 5px;
+        gap: 5px;
+    }
+    
+    .mono-text {
+        font-size: 12px;
+    }
+    
+    .overlay h1 {
+        font-size: 32px;
+    }
+    
+    .menu-btn {
+        width: 180px;
+        padding: 10px 20px;
+        font-size: 12px;
+    }
+    
+    #mobile-controls {
+        display: flex !important;
+    }
+    
+    .controls-box div {
+        font-size: 11px;
+    }
+    
+    .viz-wrapper {
+        padding: 12px;
+    }
+    
+    .setting-group {
+        width: 200px;
+    }
 }
 
-.setting-group select:focus {
-    outline: none;
-    border-color: #00f3ff;
-}
-
-.setting-group select option {
-    background: #1a1a2e;
-    color: #fff;
+@media (max-width: 480px) {
+    .arena-wrapper {
+        padding: 5px;
+    }
+    
+    .dashboard-wrapper {
+        padding: 10px;
+        max-height: 35vh;
+    }
+    
+    .touch-zone {
+        width: 30px;
+    }
+    
+    #touch-left {
+        left: -30px;
+    }
+    
+    #touch-right {
+        right: -30px;
+    }
+    
+    .touch-label {
+        font-size: 14px;
+    }
+    
+    .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+    }
+    
+    .metric-card {
+        padding: 8px;
+    }
+    
+    .metric-card span {
+        font-size: 14px;
+    }
+    
+    .overlay h1 {
+        font-size: 28px;
+    }
+    
+    .menu-btn {
+        width: 160px;
+        padding: 8px 16px;
+        font-size: 11px;
+        margin: 5px;
+    }
+    
+    .setting-group {
+        width: 160px;
+    }
+    
+    .setting-group label {
+        font-size: 10px;
+    }
+    
+    .setting-group select {
+        font-size: 12px;
+        padding: 5px 10px;
+        width: 80px;
+    }
+    
+    #mobile-controls {
+        gap: 10px;
+        padding: 8px 15px;
+    }
+    
+    .mobile-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+    }
 }
