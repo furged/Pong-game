@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>AI Pong Lab</title>
+    <title>PONG</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,64 +12,67 @@
         <div class="arena-wrapper">
             <div id="gameWrapper">
                 <canvas id="gameCanvas" width="800" height="600"></canvas>
-                <div id="touch-zone-right"></div>
-                <div id="touch-zone-left"></div>
                 
                 <div id="menu-overlay" class="overlay">
-                    <h1>AI PONG LAB</h1>
-                    <p>Machine Learning Playground</p>
-                    <button class="menu-btn" onclick="startGame('single')">PLAY VS AI</button>
+                    <h1>PONG</h1>
+                    <p>Classic Pong</p>
+                    <button class="menu-btn" onclick="startGame('single')">PLAY VS BOT</button>
                     <button class="menu-btn" onclick="startGame('multi')">MULTIPLAYER</button>
                     <button class="menu-btn settings-btn" onclick="toggleSettings()">⚙️ SETTINGS</button>
                 </div>
 
                 <div id="settings-overlay" class="overlay" style="display:none;">
                     <h2>⚙️ Settings</h2>
-                    <div class="setting-group"><label>Paddle A Color</label><input type="color" id="colorPaddleA" value="#00f3ff"></div>
-                    <div class="setting-group"><label>Paddle B Color</label><input type="color" id="colorPaddleB" value="#ff0040"></div>
-                    <div class="setting-group"><label>Ball Color</label><input type="color" id="colorBall" value="#ffffff"></div>
-                    <div class="setting-group"><label>Background Color</label><input type="color" id="colorBg" value="#000000"></div>
-                    <div class="setting-group"><label>Border Color</label><input type="color" id="colorBorder" value="#ff0040"></div>
+                    <div class="setting-group">
+                        <label>Paddle 1 Color</label>
+                        <input type="color" id="colorPaddleA" value="#00f3ff">
+                    </div>
+                    <div class="setting-group">
+                        <label>Paddle 2 Color</label>
+                        <input type="color" id="colorPaddleB" value="#ff0040">
+                    </div>
+                    <div class="setting-group">
+                        <label>Ball Color</label>
+                        <input type="color" id="colorBall" value="#ffffff">
+                    </div>
+                    <div class="setting-group">
+                        <label>Background Color</label>
+                        <input type="color" id="colorBg" value="#000000">
+                    </div>
                     <button class="menu-btn back-btn" onclick="toggleSettings()">CLOSE</button>
                 </div>
             </div>
+            
             <div class="control-bar">
-                <button class="action-btn" onclick="exportCSV()">EXPORT DATA (CSV)</button>
+                <span id="score-display" class="mono-text">P1: 0 | P2: 0</span>
                 <span id="frame-count" class="mono-text">Frames: 0</span>
             </div>
         </div>
 
         <div class="dashboard-wrapper">
             <div class="dashboard-header">
-                <h3>AI RESEARCH DASHBOARD</h3>
-                <div class="status-badge" id="model-status">● LOADING MODEL...</div>
+                <h3>GAME INFO</h3>
+                <div class="status-badge" id="game-status">● READY</div>
             </div>
 
             <div class="metrics-grid">
-                <div class="metric-card"><label>Current Model</label><span id="ai-model">Neural Network</span></div>
-                <div class="metric-card"><label>Current Action</label><span id="current-action">STAY</span></div>
-                <div class="metric-card"><label>Win Rate</label><span id="win-rate">0%</span></div>
+                <div class="metric-card"><label>Mode</label><span id="game-mode">-</span></div>
                 <div class="metric-card"><label>Games Played</label><span id="games-played">0</span></div>
-                <div class="metric-card"><label>Avg Rally</label><span id="avg-rally">0</span></div>
-                <div class="metric-card"><label>Frames Processed</label><span id="frames-processed">0</span></div>
+                <div class="metric-card"><label>Longest Rally</label><span id="longest-rally">0</span></div>
+                <div class="metric-card"><label>Controls</label><span id="controls-info">P1: W/S | P2: ↑/↓</span></div>
             </div>
 
             <div class="viz-wrapper">
-                <h4>NEURAL NETWORK DECISION VISUALIZATION</h4>
-                <canvas id="nnViz" width="320" height="300"></canvas>
-                <div class="confidence-bar">
-                    <span>UP</span>
-                    <div class="bar-track"><div class="bar-fill" id="conf-up" style="width: 10%"></div></div>
-                    <span>DOWN</span>
-                    <div class="bar-track"><div class="bar-fill" id="conf-down" style="width: 10%"></div></div>
-                    <span>STAY</span>
-                    <div class="bar-track"><div class="bar-fill" id="conf-stay" style="width: 80%"></div></div>
+                <h4>CONTROLS</h4>
+                <div class="controls-box">
+                    <div><strong>P1 (Left):</strong> W (up) / S (down)</div>
+                    <div><strong>P2 (Right):</strong> ↑ (up) / ↓ (down)</div>
+                    <div><strong>Game:</strong> P (pause) / R (restart) / M (menu)</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
